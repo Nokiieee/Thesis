@@ -4,6 +4,8 @@ import { Card } from "@/components/ui/card";
 import { ArrowLeft, Play, Home } from "lucide-react";
 import { useEffect, useState } from "react";
 
+import Spinner from "./Spinner";
+
 type BackendResponse = {
   recommendation: string;
   description: string;
@@ -11,13 +13,17 @@ type BackendResponse = {
   video_id: string;
 };
 
-const logoPath = (name: string) => `/logos/${name.toLowerCase().replace(/\s+/g, "-")}.png`;
-const pdfPath = (name: string) => `/pdfs/${name.toLowerCase().replace(/\s+/g, "-")}.pdf`;
+const logoPath = (name: string) =>
+  `/logos/${name.toLowerCase().replace(/\s+/g, "-")}.png`;
+const pdfPath = (name: string) =>
+  `/pdfs/${name.toLowerCase().replace(/\s+/g, "-")}.pdf`;
 
 const Result = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const [recommendation, setRecommendation] = useState<BackendResponse | null>(null);
+  const [recommendation, setRecommendation] = useState<BackendResponse | null>(
+    null,
+  );
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -36,11 +42,14 @@ const Result = () => {
       console.log("FETCH STARTED");
 
       try {
-        const res = await fetch("http://192.168.1.38:8000/predict", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(data),
-        });
+        const res = await fetch(
+          "https://thesis-ljvg.onrender.com/predict-indoor",
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data),
+          },
+        );
 
         console.log("FETCH SENT");
 
@@ -59,7 +68,13 @@ const Result = () => {
     fetchPrediction();
   }, [location.state, navigate]);
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center text-lg font-semibold">Loading recommendation...</div>;
+  if (loading)
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Spinner loading={loading} />
+      </div>
+    );
+
   if (!recommendation) return null;
 
   const logoSrc = logoPath(recommendation.recommendation);
@@ -79,29 +94,54 @@ const Result = () => {
           <Card className="p-8 text-center">
             <div className="flex justify-center mb-6">
               <div className="w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center overflow-hidden">
-                <img src={logoSrc} alt="Farming Logo" className="w-20 h-20 object-contain" />
+                <img
+                  src={logoSrc}
+                  alt="Farming Logo"
+                  className="w-20 h-20 object-contain"
+                />
               </div>
             </div>
 
-            <h2 className="text-3xl font-bold mb-2">{recommendation.recommendation}</h2>
+            <h2 className="text-3xl font-bold mb-2">
+              {recommendation.recommendation}
+            </h2>
             <div className="inline-block px-4 py-1 bg-primary/10 text-primary rounded-full text-sm font-medium mb-4">
-              {recommendation.type === "indoor" ? "Indoor Farming" : "Outdoor Farming"}
+              {recommendation.type === "indoor"
+                ? "Indoor Farming"
+                : "Outdoor Farming"}
             </div>
-            <p className="text-muted-foreground text-lg">{recommendation.description}</p>
+            <p className="text-muted-foreground text-lg">
+              {recommendation.description}
+            </p>
           </Card>
 
           <Card className="p-6 space-y-4">
-            <Button className="w-full" size="lg" style={{ backgroundColor: "#73AF6F", color: "white" }}
-              onClick={() => navigate(`/video/${recommendation.recommendation.toLowerCase().replace(/\s+/g, "-")}`)}>
+            <Button
+              className="w-full"
+              size="lg"
+              style={{ backgroundColor: "#73AF6F", color: "white" }}
+              onClick={() =>
+                navigate(
+                  `/video/${recommendation.recommendation.toLowerCase().replace(/\s+/g, "-")}`,
+                )
+              }
+            >
               <Play className="w-5 h-5 mr-2" /> Watch Tutorial Video
             </Button>
 
-            <Button className="w-full" size="lg" style={{ backgroundColor: "#73AF6F", color: "white" }}
-              onClick={() => window.open(pdfFile, "_blank")}>
+            <Button
+              className="w-full"
+              size="lg"
+              style={{ backgroundColor: "#73AF6F", color: "white" }}
+              onClick={() => window.open(pdfFile, "_blank")}
+            >
               View PDF Guide
             </Button>
 
-            <Button className="w-full" size="lg" style={{ backgroundColor: "#628141", color: "white" }}
+            <Button
+              className="w-full"
+              size="lg"
+              style={{ backgroundColor: "#628141", color: "white" }}
               onClick={() => {
                 const link = document.createElement("a");
                 link.href = pdfFile;
@@ -109,11 +149,17 @@ const Result = () => {
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
-              }}>
+              }}
+            >
               Download PDF Guide
             </Button>
 
-            <Button variant="outline" className="w-full" size="lg" onClick={() => navigate("/")}>
+            <Button
+              variant="outline"
+              className="w-full"
+              size="lg"
+              onClick={() => navigate("/")}
+            >
               <Home className="w-5 h-5 mr-2" /> Back to Home
             </Button>
           </Card>

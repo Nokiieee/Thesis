@@ -14,46 +14,187 @@ type Question = {
 
 // Indoor questions
 const indoorQuestions: Question[] = [
-  { id: "avg_temp", question: "Average temperature of your indoor space?", options: ["Cool (18–21°C)", "Moderate (22–25°C)", "Warm (26–29°C)"] },
-  { id: "humidity_control", question: "Do you have humidity control?", options: ["No", "Partial", "Yes"] },
-  { id: "available_space", question: "Available planting space?", options: ["Small (<5 m²)", "Medium (5–15 m²)", "Large (>15 m²)"] },
-  { id: "access_to_water", question: "Do you have reliable access to water?", options: ["No", "Sometimes", "Always"] },
-  { id: "power_availability", question: "How consistent is your power availability?", options: ["No", "Sometimes", "Yes"] },
-  { id: "capital_budget", question: "What is your capital budget?", options: ["Low", "Medium", "High"] },
-  { id: "tech_comfort_level", question: "What is your comfort level with technology?", options: ["Low", "Medium", "High"] },
-  { id: "training_experience", question: "What is your farming experience level?", options: ["None", "Some", "Extensive"] },
-  { id: "daily_time_commitment", question: "How much time can you spend daily on indoor farming?", options: ["<1 hour", "1–2 hours", "2–4 hours", "4+ hours"] },
-  { id: "interest_in_fish", question: "Are you interested in raising fish?", options: ["No", "Maybe", "Yes"] },
-  { id: "pH_monitoring", question: "Do you have tools to monitor pH and nutrients?", options: ["None", "Some tools", "Full monitoring"] },
-  { id: "sustainability_interest", question: "How important is sustainability to you?", options: ["Low", "Medium", "High"] },
-  { id: "goal_type", question: "What is your indoor farming goal?", options: ["Hobby", "Profit", "Research"] },
-  { id: "lighting_setup", question: "What lighting setup do you use?", options: ["Natural only", "Partial LED", "Full LED"] },
-  { id: "ventilation_quality", question: "What is the ventilation quality?", options: ["Poor", "Average", "Excellent"] },
+  {
+    id: "available_space",
+    question: "How much indoor space can you dedicate to your setup?",
+    options: ["Small", "Medium", "Large"],
+  },
+  {
+    id: "power_availability",
+    question: "How stable is your electricity and backup power?",
+    options: ["Unreliable", "Moderate", "Highly Stable"],
+  },
+  {
+    id: "lighting_setup",
+    question: "What kind of light will your plants receive?",
+    options: [
+      "Low Natural Light",
+      "Basic Artificial Light",
+      "High-Intensity Light",
+    ],
+  },
+  {
+    id: "access_to_water",
+    question: "How easy is it to get water to and from your setup?",
+    options: ["Low", "Moderate", "High"],
+  },
+  {
+    id: "pH_monitoring",
+    question: "Are you willing to test the water chemistry every day?",
+    options: ["None", "Daily Manual", "Advanced"],
+  },
+  {
+    id: "avg_temp",
+    question: "How much control do you have over the room's temperature?",
+    options: ["Poor", "Moderate", "Excellent"],
+  },
+  {
+    id: "ventilation_quality",
+    question: "How is the air circulation in your growing area?",
+    options: ["Stagnant", "Moderate", "High"],
+  },
+  {
+    id: "capital_budget",
+    question: "What is your budget for equipment (pumps, towers, and lights)?",
+    options: ["Low", "Medium", "High"],
+  },
+  {
+    id: "daily_time_commitment",
+    question: "How much time can you spend on daily maintenance?",
+    options: ["10 to 30 Minutes", "30 to 60 Minutes", "Over 60 Minutes"],
+  },
+  {
+    id: "noise_tolerance",
+    question: "How much equipment noise is allowed in the area?",
+    options: ["Silent", "Low Hum", "Loud"],
+  },
+  {
+    id: "cleanliness",
+    question: "How clean and isolated is your growing area?",
+    options: ["Low", "Moderate", "High"],
+  },
+  {
+    id: "nutrient_method",
+    question: "How do you want to provide nutrients to your plants?",
+    options: ["Natural/Fish Waste", "Liquid Mix", "Chemical Mix"],
+  },
+  {
+    id: "interest_in_fish",
+    question: "Are you interested in raising fish along with your plants?",
+    options: ["No", "Yes"], // ✅ FIXED
+  },
+  {
+    id: "goal_type",
+    question: "What is your primary reason for planting?",
+    options: ["Personal", "Small-scale", "Commercial"],
+  },
+  {
+    id: "training_experience",
+    question: "How much experience do you have with technical farming?",
+    options: ["Beginner", "Intermediate", "Experienced"],
+  },
 ];
 
 // --------------------
 // Mapping strings → numbers
 // --------------------
+const frontendToDatasetKey: Record<string, string> = {
+  available_space: "Space_Size",
+  power_availability: "Power_Reliability",
+  lighting_setup: "Lighting",
+  access_to_water: "Water_Accessibility",
+  pH_monitoring: "Water_Chemistry",
+  avg_temp: "Temperature_Control",
+  ventilation_quality: "Ventilation",
+  capital_budget: "Budget",
+  daily_time_commitment: "Time_Available",
+  noise_tolerance: "Noise_Tolerance",
+  cleanliness: "Biosecurity",
+  nutrient_method: "Nutrient_Source",
+  interest_in_fish: "Aquaculture",
+  goal_type: "Purpose",
+  training_experience: "Experience",
+};
+
 const optionToNumber = (questionId: string, value: string) => {
   const map: Record<string, Record<string, number>> = {
-    avg_temp: { "Cool (18–21°C)": 0, "Moderate (22–25°C)": 1, "Warm (26–29°C)": 2 },
-    humidity_control: { "No": 0, "Partial": 1, "Yes": 2 },
-    available_space: { "Small (<5 m²)": 0, "Medium (5–15 m²)": 1, "Large (>15 m²)": 2 },
-    access_to_water: { "No": 0, "Sometimes": 1, "Always": 2 },
-    power_availability: { "No": 0, "Sometimes": 1, "Yes": 2 },
-    capital_budget: { "Low": 0, "Medium": 1, "High": 2 },
-    tech_comfort_level: { "Low": 0, "Medium": 1, "High": 2 },
-    training_experience: { "None": 0, "Some": 1, "Extensive": 2 },
-    daily_time_commitment: { "<1 hour": 0, "1–2 hours": 1, "2–4 hours": 2, "4+ hours": 3 },
-    interest_in_fish: { "No": 0, "Maybe": 1, "Yes": 2 },
-    pH_monitoring: { "None": 0, "Some tools": 1, "Full monitoring": 2 },
-    sustainability_interest: { "Low": 0, "Medium": 1, "High": 2 },
-    goal_type: { "Hobby": 0, "Profit": 1, "Research": 2 },
-    lighting_setup: { "Natural only": 0, "Partial LED": 1, "Full LED": 2 },
-    ventilation_quality: { "Poor": 0, "Average": 1, "Excellent": 2 },
+    available_space: {
+      Small: 0,
+      Medium: 1,
+      Large: 2,
+    },
+    power_availability: {
+      Unreliable: 0,
+      Moderate: 1,
+      "Highly Stable": 2,
+    },
+    lighting_setup: {
+      "Low Natural Light": 0,
+      "Basic Artificial Light": 1,
+      "High-Intensity Light": 2,
+    },
+    access_to_water: {
+      Low: 0,
+      Moderate: 1,
+      High: 2,
+    },
+    pH_monitoring: {
+      None: 0,
+      "Daily Manual": 1,
+      Advanced: 2,
+    },
+    avg_temp: {
+      Poor: 0,
+      Moderate: 1,
+      Excellent: 2,
+    },
+    ventilation_quality: {
+      Stagnant: 0,
+      Moderate: 1,
+      High: 2,
+    },
+    capital_budget: {
+      Low: 0,
+      Medium: 1,
+      High: 2,
+    },
+    daily_time_commitment: {
+      "10 to 30 Minutes": 0,
+      "30 to 60 Minutes": 1,
+      "Over 60 Minutes": 2,
+    },
+    noise_tolerance: {
+      Silent: 0,
+      "Low Hum": 1,
+      Loud: 2,
+    },
+    cleanliness: {
+      Low: 0,
+      Moderate: 1,
+      High: 2,
+    },
+    nutrient_method: {
+      "Natural/Fish Waste": 0,
+      "Liquid Mix": 1,
+      "Chemical Mix": 2,
+    },
+    interest_in_fish: {
+      No: 0,
+      Yes: 1,
+    },
+    goal_type: {
+      Personal: 0,
+      "Small-scale": 1,
+      Commercial: 2,
+    },
+    training_experience: {
+      Beginner: 0,
+      Intermediate: 1,
+      Experienced: 2,
+    },
   };
 
-  return map[questionId][value];
+  return map[questionId]?.[value] ?? 0;
 };
 
 // --------------------
@@ -76,7 +217,9 @@ const Questionnaire = ({ farmingType }: Props) => {
     setShowConfirm(false);
     navigate("/questionnaire-type");
   };
-  const handlePrevStep = () => { if (step > 0) setStep(step - 1); };
+  const handlePrevStep = () => {
+    if (step > 0) setStep(step - 1);
+  };
 
   const handleNext = () => {
     if (!answers[current.id]) {
@@ -84,12 +227,19 @@ const Questionnaire = ({ farmingType }: Props) => {
       return;
     }
     if (step + 1 === questions.length) {
-      // Convert answers to numeric before sending to Result
-      const numericAnswers: Record<string, number> = {};
-      for (const key in answers) {
-        numericAnswers[key] = optionToNumber(key, answers[key]);
+      const payload: Record<string, number> = {};
+
+      for (const frontendKey in answers) {
+        const datasetKey = frontendToDatasetKey[frontendKey];
+        const value = answers[frontendKey];
+
+        if (!datasetKey) continue; // safety guard
+
+        payload[datasetKey] = optionToNumber(frontendKey, value);
       }
-      navigate("/result", { state: numericAnswers });
+
+      console.log("Payload sent to backend:", payload);
+      navigate("/result", { state: payload });
     } else {
       setStep(step + 1);
     }
@@ -102,7 +252,9 @@ const Questionnaire = ({ farmingType }: Props) => {
           <ArrowLeft className="w-6 h-6" />
         </Button>
         <div>
-          <h1 className="text-2xl font-bold">{farmingType} Farming Questionnaire</h1>
+          <h1 className="text-2xl font-bold">
+            {farmingType} Farming Questionnaire
+          </h1>
           <p className="text-sm text-muted-foreground">
             Question {step + 1} of {questions.length}
           </p>
@@ -150,12 +302,17 @@ const Questionnaire = ({ farmingType }: Props) => {
                   <Sparkles className="w-5 h-5 mr-2" />
                   Finish
                 </>
-              ) : "Next"}
+              ) : (
+                "Next"
+              )}
             </button>
           </div>
 
           <div className="w-full h-2 bg-muted rounded-full mt-4">
-            <div className="h-2 bg-primary rounded-full" style={{ width: `${progress}%` }} />
+            <div
+              className="h-2 bg-primary rounded-full"
+              style={{ width: `${progress}%` }}
+            />
           </div>
         </Card>
       </div>
@@ -178,10 +335,16 @@ const Questionnaire = ({ farmingType }: Props) => {
               <Card className="flex flex-col gap-4 p-6">
                 <h2 className="text-xl font-bold">Are you sure?</h2>
                 <p className="text-muted-foreground">
-                  Going back will discard your current progress. Do you want to continue?
+                  Going back will discard your current progress. Do you want to
+                  continue?
                 </p>
                 <div className="flex justify-end gap-2">
-                  <Button variant="outline" onClick={() => setShowConfirm(false)}>Cancel</Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => setShowConfirm(false)}
+                  >
+                    Cancel
+                  </Button>
                   <Button
                     style={{ backgroundColor: "#628141", color: "white" }}
                     onClick={handleConfirmBack}

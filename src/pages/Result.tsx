@@ -43,7 +43,7 @@ const Result = () => {
 
       try {
         const res = await fetch(
-          "https://thesis-ljvg.onrender.com/predict-indoor",
+          "https://thesis-ljvg.onrender.com/predict-indoor", // http://localhost:8000/predict-indoor | https://thesis-ljvg.onrender.com/predict-indoor
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -55,6 +55,12 @@ const Result = () => {
 
         const json = await res.json();
         console.log("RESPONSE:", json);
+
+        if (!res.ok) {
+          throw new Error(json?.detail || "Backend error");
+        }
+
+        setRecommendation(json);
 
         setRecommendation(json);
       } catch (err) {
@@ -77,8 +83,13 @@ const Result = () => {
 
   if (!recommendation) return null;
 
-  const logoSrc = logoPath(recommendation.recommendation);
-  const pdfFile = pdfPath(recommendation.recommendation);
+  const logoSrc = recommendation?.recommendation
+    ? logoPath(recommendation.recommendation)
+    : "";
+
+  const pdfFile = recommendation?.recommendation
+    ? pdfPath(recommendation.recommendation)
+    : "";
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-secondary p-4">

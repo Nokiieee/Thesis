@@ -199,6 +199,7 @@ const QuestionnaireOutdoor = () => {
       // Call outdoor backend (note: backend runs on port 8001 in this setup)
       // --------------------
       fetch("https://thesis-ljvg.onrender.com/predict-outdoor", {
+        // http://localhost:8000/predict-outdoor | https://thesis-ljvg.onrender.com/predict-outdoor
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),

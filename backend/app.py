@@ -44,21 +44,21 @@ outdoor_labels = {
 # Schemas
 # --------------------
 class IndoorData(BaseModel):
-    avg_temp: int
-    humidity_control: int
-    available_space: int
-    access_to_water: int
-    power_availability: int
-    capital_budget: int
-    tech_comfort_level: int
-    training_experience: int
-    daily_time_commitment: int
-    interest_in_fish: int
-    pH_monitoring: int
-    sustainability_interest: int
-    goal_type: int
-    lighting_setup: int
-    ventilation_quality: int
+    Space_Size: int
+    Power_Reliability: int
+    Lighting: int
+    Water_Accessibility: int
+    Water_Chemistry: int
+    Temperature_Control: int
+    Ventilation: int
+    Budget: int
+    Time_Available: int
+    Noise_Tolerance: int
+    Biosecurity: int
+    Nutrient_Source: int
+    Aquaculture: int
+    Purpose: int
+    Experience: int
 
 
 class OutdoorData(BaseModel):
@@ -97,23 +97,23 @@ app.add_middleware(
 # --------------------
 @app.post("/predict-indoor")
 def predict_indoor(data: IndoorData):
-    values = np.array([[ 
-        data.avg_temp,
-        data.humidity_control,
-        data.available_space,
-        data.access_to_water,
-        data.power_availability,
-        data.capital_budget,
-        data.tech_comfort_level,
-        data.training_experience,
-        data.daily_time_commitment,
-        data.interest_in_fish,
-        data.pH_monitoring,
-        data.sustainability_interest,
-        data.goal_type,
-        data.lighting_setup,
-        data.ventilation_quality
-    ]])
+    values = np.array([[
+    data.Space_Size,
+    data.Power_Reliability,
+    data.Lighting,
+    data.Water_Accessibility,
+    data.Water_Chemistry,
+    data.Temperature_Control,
+    data.Ventilation,
+    data.Budget,
+    data.Time_Available,
+    data.Noise_Tolerance,
+    data.Biosecurity,
+    data.Nutrient_Source,
+    data.Aquaculture,
+    data.Purpose,
+    data.Experience
+]])
 
     pred = indoor_model.predict(values)[0]
     method = indoor_labels[pred]

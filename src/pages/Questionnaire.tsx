@@ -180,7 +180,7 @@ const optionToNumber = (questionId: string, value: string) => {
     },
     interest_in_fish: {
       No: 0,
-      Yes: 1,
+      Yes: 2,
     },
     goal_type: {
       Personal: 0,
@@ -229,13 +229,26 @@ const Questionnaire = ({ farmingType }: Props) => {
     if (step + 1 === questions.length) {
       const payload: Record<string, number> = {};
 
-      for (const frontendKey in answers) {
-        const datasetKey = frontendToDatasetKey[frontendKey];
-        const value = answers[frontendKey];
+      for (const q of indoorQuestions) {
+        const key = q.id;
+        const datasetKey = frontendToDatasetKey[key];
+        const value = answers[key];
 
-        if (!datasetKey) continue; // safety guard
+        if (!datasetKey) continue;
 
-        payload[datasetKey] = optionToNumber(frontendKey, value);
+        if (value === undefined) {
+          toast.error(`Missing answer: ${q.question}`);
+          return;
+        }
+
+        const numeric = optionToNumber(key, value);
+
+        if (numeric === undefined || isNaN(numeric)) {
+          toast.error(`Invalid value for ${key}`);
+          return;
+        }
+
+        payload[datasetKey] = numeric;
       }
 
       console.log("Payload sent to backend:", payload);

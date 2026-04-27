@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
+import { Browser } from "@capacitor/browser";
 
 type PdfItem = {
   id: string;
@@ -14,26 +15,100 @@ type PdfItem = {
   fileUrl: string;
 };
 
+const BASE_URL = "https://thesis-ljvg.onrender.com";
+
 const pdfs: PdfItem[] = [
-  { id: "hydroponics", title: "Hydroponics Guide", category: "Indoor Farming", logo: "/logos/hydroponics_p.png", fileUrl: "/pdfs/hydroponics.pdf" },
-  { id: "aquaponics", title: "Aquaponics System Setup", category: "Indoor Farming", logo: "/logos/aquaponics_p.png", fileUrl: "/pdfs/aquaponics.pdf" },
-  { id: "aeroponics", title: "Aeroponics Advanced", category: "Indoor Farming", logo: "/logos/aeroponics_p.png", fileUrl: "/pdfs/aeroponics.pdf" },
-  { id: "upo", title: "Growing Upo (Bottle Gourd)", category: "Lowland Crops", logo: "/logos/upo_p.png", fileUrl: "/pdfs/upo.pdf" },
-  { id: "ampalaya", title: "Ampalaya (Bitter Gourd) Farming", category: "Lowland Crops", logo: "/logos/ampalaya_p.png", fileUrl: "/pdfs/ampalaya.pdf" },
-  { id: "patola", title: "Patola (Sponge Gourd) Guide", category: "Lowland Crops", logo: "/logos/patola_p.png", fileUrl: "/pdfs/patola.pdf" },
-  { id: "eggplant", title: "Eggplant Cultivation", category: "Lowland Crops", logo: "/logos/eggplant_p.png", fileUrl: "/pdfs/eggplant.pdf" },
-  { id: "sitaw", title: "Sitaw (String Beans) Growing", category: "Lowland Crops", logo: "/logos/sitaw_p.png", fileUrl: "/pdfs/sitaw.pdf" },
-  { id: "tomato", title: "Tomato Farming Basics", category: "Lowland Crops", logo: "/logos/tomato_p.png", fileUrl: "/pdfs/tomato.pdf" },
-  { id: "squash", title: "Squash Growing Guide", category: "Lowland Crops", logo: "/logos/squash_p.png", fileUrl: "/pdfs/squash.pdf" },
-  { id: "hot-pepper", title: "Hot Pepper Cultivation", category: "Lowland Crops", logo: "/logos/hot-pepper_p.png", fileUrl: "/pdfs/hot-pepper.pdf" },
-  { id: "okra", title: "Okra Farming Essentials", category: "Lowland Crops", logo: "/logos/okra_p.png", fileUrl: "/pdfs/okra.pdf" },
+  {
+    id: "hydroponics",
+    title: "Hydroponics Guide",
+    category: "Indoor Farming",
+    logo: "/logos/hydroponics_p.png",
+    fileUrl: `${BASE_URL}/pdfs/hydroponics.pdf`,
+  },
+  {
+    id: "aquaponics",
+    title: "Aquaponics System Setup",
+    category: "Indoor Farming",
+    logo: "/logos/aquaponics_p.png",
+    fileUrl: `${BASE_URL}/pdfs/aquaponics.pdf`,
+  },
+  {
+    id: "aeroponics",
+    title: "Aeroponics Advanced",
+    category: "Indoor Farming",
+    logo: "/logos/aeroponics_p.png",
+    fileUrl: `${BASE_URL}/pdfs/aeroponics.pdf`,
+  },
+  {
+    id: "upo",
+    title: "Growing Upo (Bottle Gourd)",
+    category: "Lowland Crops",
+    logo: "/logos/upo_p.png",
+    fileUrl: `${BASE_URL}/pdfs/upo.pdf`,
+  },
+  {
+    id: "ampalaya",
+    title: "Ampalaya (Bitter Gourd) Farming",
+    category: "Lowland Crops",
+    logo: "/logos/ampalaya_p.png",
+    fileUrl: `${BASE_URL}/pdfs/ampalaya.pdf`,
+  },
+  {
+    id: "patola",
+    title: "Patola (Sponge Gourd) Guide",
+    category: "Lowland Crops",
+    logo: "/logos/patola_p.png",
+    fileUrl: `${BASE_URL}/pdfs/patola.pdf`,
+  },
+  {
+    id: "eggplant",
+    title: "Eggplant Cultivation",
+    category: "Lowland Crops",
+    logo: "/logos/eggplant_p.png",
+    fileUrl: `${BASE_URL}/pdfs/eggplant.pdf`,
+  },
+  {
+    id: "sitaw",
+    title: "Sitaw (String Beans) Growing",
+    category: "Lowland Crops",
+    logo: "/logos/sitaw_p.png",
+    fileUrl: `${BASE_URL}/pdfs/sitaw.pdf`,
+  },
+  {
+    id: "tomato",
+    title: "Tomato Farming Basics",
+    category: "Lowland Crops",
+    logo: "/logos/tomato_p.png",
+    fileUrl: `${BASE_URL}/pdfs/tomato.pdf`,
+  },
+  {
+    id: "squash",
+    title: "Squash Growing Guide",
+    category: "Lowland Crops",
+    logo: "/logos/squash_p.png",
+    fileUrl: `${BASE_URL}/pdfs/squash.pdf`,
+  },
+  {
+    id: "hot-pepper",
+    title: "Hot Pepper Cultivation",
+    category: "Lowland Crops",
+    logo: "/logos/hot-pepper_p.png",
+    fileUrl: `${BASE_URL}/pdfs/hot-pepper.pdf`,
+  },
+  {
+    id: "okra",
+    title: "Okra Farming Essentials",
+    category: "Lowland Crops",
+    logo: "/logos/okra_p.png",
+    fileUrl: `${BASE_URL}/pdfs/okra.pdf`,
+  },
 ];
 
 const PdfPage = () => {
   const navigate = useNavigate();
 
-  const indoorPdfs = pdfs.filter(pdf => pdf.category === "Indoor Farming");
-  const outdoorPdfs = pdfs.filter(pdf => pdf.category === "Lowland Crops");
+  const indoorPdfs = pdfs.filter((pdf) => pdf.category === "Indoor Farming");
+  const outdoorPdfs = pdfs.filter((pdf) => pdf.category === "Lowland Crops");
 
   const handleDownload = (fileUrl: string, title: string) => {
     const link = document.createElement("a");
@@ -44,8 +119,8 @@ const PdfPage = () => {
     document.body.removeChild(link);
   };
 
-  const handleView = (fileUrl: string) => {
-    window.open(fileUrl, "_blank");
+  const handleView = async (fileUrl: string) => {
+    await Browser.open({ url: fileUrl });
   };
 
   return (
@@ -62,10 +137,15 @@ const PdfPage = () => {
           </div>
         </header>
 
-        <main className="flex flex-col gap-8 overflow-y-auto" style={{ height: "calc(100vh - 6rem)" }}>
+        <main
+          className="flex flex-col gap-8 overflow-y-auto"
+          style={{ height: "calc(100vh - 6rem)" }}
+        >
           {/* Indoor Farming PDFs */}
           <section>
-            <h2 className="text-xl font-semibold mb-4">Indoor Farming Methods</h2>
+            <h2 className="text-xl font-semibold mb-4">
+              Indoor Farming Methods
+            </h2>
             <div className="space-y-4">
               {indoorPdfs.map((pdf) => (
                 <ZoomCard
@@ -120,7 +200,11 @@ const ZoomCard = ({ pdf, onDownload, onView }: ZoomCardProps) => {
       <Card className="p-4 flex items-center gap-4 shadow-lg bg-white transition-all duration-300 hover:-translate-y-2 hover:shadow-xl">
         {/* Logo */}
         <div className="w-24 h-24 flex items-center justify-center flex-shrink-0">
-          <img src={pdf.logo} alt={pdf.title} className="w-20 h-20 object-contain" />
+          <img
+            src={pdf.logo}
+            alt={pdf.title}
+            className="w-20 h-20 object-contain"
+          />
         </div>
 
         {/* Title */}

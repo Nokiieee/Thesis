@@ -5,6 +5,9 @@ import numpy as np
 import os
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from fastapi.staticfiles import StaticFiles
+
+
 
 # --------------------
 # Load models
@@ -83,6 +86,8 @@ class OutdoorData(BaseModel):
 # App & CORS
 # --------------------
 app = FastAPI()
+
+app.mount("/pdfs", StaticFiles(directory="pdfs"), name="pdfs")
 
 app.add_middleware(
     CORSMiddleware,

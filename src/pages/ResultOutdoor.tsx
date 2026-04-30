@@ -111,7 +111,7 @@ const ResultOutdoor = () => {
             <Button
               className="w-full"
               size="lg"
-              style={{ backgroundColor: "#73AF6F", color: "white" }}
+              style={{ backgroundColor: "#479941", color: "white" }}
               onClick={() =>
                 navigate(
                   `/video/${recommendation.recommendation.toLowerCase().replace(/\s+/g, "-")}`,
@@ -124,35 +124,10 @@ const ResultOutdoor = () => {
             <Button
               className="w-full"
               size="lg"
-              style={{ backgroundColor: "#73AF6F", color: "white" }}
+              style={{ backgroundColor: "#52b14b", color: "white" }}
               onClick={() => window.open(pdfFile, "_blank")}
             >
               View PDF Guide
-            </Button>
-
-            <Button
-              className="w-full"
-              size="lg"
-              style={{ backgroundColor: "#628141", color: "white" }}
-              onClick={() => {
-                const link = document.createElement("a");
-                link.href = pdfFile;
-                link.download = recommendation.recommendation + ".pdf";
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-              }}
-            >
-              Download PDF Guide
-            </Button>
-
-            <Button
-              variant="outline"
-              className="w-full"
-              size="lg"
-              onClick={() => navigate("/")}
-            >
-              <Home className="w-5 h-5 mr-2" /> Back to Home
             </Button>
           </Card>
         </div>

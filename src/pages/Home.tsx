@@ -43,15 +43,23 @@ const HEADER_HEIGHT = 160; // adjust based on your header height
 const Home = () => {
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
-  const [loading, setLoading] = useState(true);
   const [activeIndex, setActiveIndex] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Splash screen
+  const [loading, setLoading] = useState(() => {
+    return sessionStorage.getItem("hasLoaded") ? false : true;
+  });
+
   useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 2000);
+    if (!loading) return;
+
+    const timer = setTimeout(() => {
+      setLoading(false);
+      sessionStorage.setItem("hasLoaded", "true");
+    }, 2000);
+
     return () => clearTimeout(timer);
-  }, []);
+  }, [loading]);
 
   // Detect active slide based on center between header bottom and screen bottom
   useEffect(() => {
@@ -80,7 +88,7 @@ const Home = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const renderSlide = (slide: typeof slides[number], index: number) => {
+  const renderSlide = (slide: (typeof slides)[number], index: number) => {
     const isActive = index === activeIndex;
     const blur = isActive ? 0 : 4; // only blur, same size for all slides
 
@@ -96,8 +104,12 @@ const Home = () => {
       >
         <Card className="w-80 flex flex-col items-center justify-center p-6 shadow-lg">
           <img src={slide.logo} className="w-40 h-40 object-contain mb-4" />
-          <h2 className="text-2xl font-semibold mb-2 text-center">{slide.title}</h2>
-          <p className="text-muted-foreground mb-4 text-center">{slide.description}</p>
+          <h2 className="text-2xl font-semibold mb-2 text-center">
+            {slide.title}
+          </h2>
+          <p className="text-muted-foreground mb-4 text-center">
+            {slide.description}
+          </p>
           <Button
             className="w-full text-white py-4 text-lg"
             style={{ backgroundColor: "#628141" }}
@@ -113,9 +125,15 @@ const Home = () => {
   if (loading) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-background to-secondary">
-        <img src={AgriLogo} alt="Logo" className="w-40 h-40 mb-4 animate-bounce" />
+        <img
+          src={AgriLogo}
+          alt="Logo"
+          className="w-40 h-40 mb-4 animate-bounce"
+        />
         <h1 className="text-4xl font-bold text-foreground mb-2">AgriGuide</h1>
-        <p className="text-muted-foreground text-center">Your Smart Farming Assistant</p>
+        <p className="text-muted-foreground text-center">
+          Your Smart Farming Assistant
+        </p>
       </div>
     );
   }
@@ -129,7 +147,9 @@ const Home = () => {
       >
         <img src={AgriLogo} className="w-20 h-20 mb-0" />
         <h1 className="text-3xl font-bold text-foreground">AgriGuide</h1>
-        <p className="text-muted-foreground -mt-1">Your Smart Farming Assistant</p>
+        <p className="text-muted-foreground -mt-1">
+          Your Smart Farming Assistant
+        </p>
       </div>
 
       {/* Fixed Burger/X Button */}
@@ -150,7 +170,9 @@ const Home = () => {
         <div className="flex flex-col items-center py-6">
           <img src={AgriLogo} className="w-20 h-20 mb-2" />
           <h2 className="text-xl font-bold text-foreground">AgriGuide</h2>
-          <p className="text-sm text-muted-foreground">Smart Farming Assistant</p>
+          <p className="text-sm text-muted-foreground">
+            Smart Farming Assistant
+          </p>
         </div>
 
         <nav className="flex-1 flex flex-col mt-2 gap-2 px-4">

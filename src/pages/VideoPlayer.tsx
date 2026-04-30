@@ -14,7 +14,12 @@ const VideoPlayer = () => {
   // All available videos
   const videoData: Record<
     string,
-    { title: string; description: string; shortDescription?: string; file: string }
+    {
+      title: string;
+      description: string;
+      shortDescription?: string;
+      file: string;
+    }
   > = {
     hydroponics: {
       title: "Hydroponics Guide",
@@ -98,7 +103,9 @@ const VideoPlayer = () => {
       <div className="min-h-screen bg-gradient-to-b from-background to-secondary p-4 flex items-center justify-center">
         <Card className="p-6 text-center">
           <p className="mb-4">Video not found</p>
-          <Button onClick={() => navigate("/tutorials")}>Back to Tutorials</Button>
+          <Button onClick={() => navigate("/tutorials")}>
+            Back to Tutorials
+          </Button>
         </Card>
       </div>
     );
@@ -106,29 +113,32 @@ const VideoPlayer = () => {
 
   // Lock landscape on fullscreen
   useEffect(() => {
-  const handleFullScreenChange = () => {
-    const orientation = screen.orientation as any; // Type assertion
-    if (document.fullscreenElement && orientation?.lock) {
-      orientation.lock("landscape").catch(() => {
-        console.log("Orientation lock failed");
-      });
-    } else if (orientation?.unlock) {
-      orientation.unlock();
-    }
-  };
+    const handleFullScreenChange = () => {
+      const orientation = screen.orientation as any; // Type assertion
+      if (document.fullscreenElement && orientation?.lock) {
+        orientation.lock("landscape").catch(() => {
+          console.log("Orientation lock failed");
+        });
+      } else if (orientation?.unlock) {
+        orientation.unlock();
+      }
+    };
 
-  document.addEventListener("fullscreenchange", handleFullScreenChange);
-  return () => {
-    document.removeEventListener("fullscreenchange", handleFullScreenChange);
-  };
-}, []);
-
+    document.addEventListener("fullscreenchange", handleFullScreenChange);
+    return () => {
+      document.removeEventListener("fullscreenchange", handleFullScreenChange);
+    };
+  }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-secondary">
       <div className="max-w-4xl mx-auto">
         <header className="p-4 flex items-center gap-4">
-          <Button variant="ghost" size="icon" onClick={() => setShowConfirm(true)}>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => navigate("/tutorials")}
+          >
             <ArrowLeft className="w-6 h-6" />
           </Button>
           <h1 className="text-xl font-bold">{currentVideo.title}</h1>
@@ -185,10 +195,14 @@ const VideoPlayer = () => {
               <Card className="flex flex-col gap-4 p-6">
                 <h2 className="text-xl font-bold">Are you sure?</h2>
                 <p className="text-muted-foreground">
-                  Going back to Home will stop the video. Do you want to continue?
+                  Going back to Home will stop the video. Do you want to
+                  continue?
                 </p>
                 <div className="flex justify-end gap-2">
-                  <Button variant="outline" onClick={() => setShowConfirm(false)}>
+                  <Button
+                    variant="outline"
+                    onClick={() => setShowConfirm(false)}
+                  >
                     Cancel
                   </Button>
                   <Button

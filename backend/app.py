@@ -82,7 +82,7 @@ class OutdoorData(BaseModel):
 app = FastAPI()
 
 # Serve PDFs
-# app.mount("/pdfs", StaticFiles(directory="pdfs"), name="pdfs")
+app.mount("/pdfs", StaticFiles(directory="pdfs"), name="pdfs")
 
 app.add_middleware(
     CORSMiddleware,

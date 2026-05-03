@@ -77,7 +77,7 @@ const ResultOutdoor = () => {
         console.log("OUTDOOR PAYLOAD:", answers); // ✔ Shows correct backend payload
 
         const res = await fetch(
-          "http://localhost:8000/predict-outdoor", // http://localhost:8000/predict-outdoor | https://thesis-ljvg.onrender.com/predict-outdoor
+          "https://thesis-ljvg.onrender.com/predict-outdoor", // http://localhost:8000/predict-outdoor | https://thesis-ljvg.onrender.com/predict-outdoor
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },

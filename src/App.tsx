@@ -15,6 +15,7 @@ import PdfPage from "./pages/PdfPage";
 import PdfViewer from "./pages/PdfViewer";
 import NotFound from "./pages/NotFound";
 import ResultOutdoor from "@/pages/ResultOutdoor";
+import Crops from "./pages/Crops";
 
 const queryClient = new QueryClient();
 
@@ -29,8 +30,14 @@ const App = () => (
 
           {/* Questionnaire */}
           <Route path="/questionnaire-type" element={<QuestionnaireType />} />
-          <Route path="/questionnaire" element={<Questionnaire farmingType="Indoor" />} />
-          <Route path="/questionnaire-outdoor" element={<QuestionnaireOutdoor />} />
+          <Route
+            path="/questionnaire"
+            element={<Questionnaire farmingType="Indoor" />}
+          />
+          <Route
+            path="/questionnaire-outdoor"
+            element={<QuestionnaireOutdoor />}
+          />
 
           {/* Results and Guides */}
           <Route path="/result" element={<Result />} />
@@ -38,9 +45,12 @@ const App = () => (
           <Route path="/tutorials" element={<Tutorials />} />
           <Route path="/video/:videoId" element={<VideoPlayer />} />
 
+          {/* Crops */}
+          <Route path="/crop/:id" element={<Crops />} />
+
           {/* PDFs */}
+          <Route path="/pdf/:pdfId" element={<PdfViewer />} />
           <Route path="/pdfs" element={<PdfPage />} />
-          
 
           {/* Fallback */}
           <Route path="*" element={<NotFound />} />

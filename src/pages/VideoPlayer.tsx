@@ -4,8 +4,12 @@ import { Card } from "@/components/ui/card";
 import { ArrowLeft } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { useLocation } from "react-router-dom";
 
 const VideoPlayer = () => {
+  const location = useLocation();
+  const from = (location.state as any)?.from || "/";
+
   const { videoId } = useParams();
   const navigate = useNavigate();
   const [showConfirm, setShowConfirm] = useState(false);
@@ -134,11 +138,7 @@ const VideoPlayer = () => {
     <div className="min-h-screen bg-gradient-to-b from-background to-secondary">
       <div className="max-w-4xl mx-auto">
         <header className="p-4 flex items-center gap-4">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => navigate("/tutorials")}
-          >
+          <Button variant="ghost" size="icon" onClick={() => navigate(-1)}>
             <ArrowLeft className="w-6 h-6" />
           </Button>
           <h1 className="text-xl font-bold">{currentVideo.title}</h1>

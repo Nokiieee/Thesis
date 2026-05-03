@@ -7,40 +7,34 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 
-
-
 # --------------------
-# Load models
+# Load models & assets
 # --------------------
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
+# Indoor model
 indoor_model = joblib.load(os.path.join(BASE_DIR, "model.pkl"))
 
+# Outdoor model
 try:
     outdoor_model = joblib.load(os.path.join(BASE_DIR, "model_outdoor.pkl"))
+    scaler_outdoor = joblib.load(os.path.join(BASE_DIR, "scaler_outdoor.pkl"))
+    label_mapping_outdoor = joblib.load(
+        os.path.join(BASE_DIR, "label_mapping_outdoor.pkl")
+    )
 except Exception as e:
-    print(f"Error loading outdoor model: {e}")
+    print(f"Error loading outdoor assets: {e}")
     outdoor_model = None
+    scaler_outdoor = None
+    label_mapping_outdoor = None
 
 # --------------------
-# Label mappings
+# Indoor labels (unchanged)
 # --------------------
 indoor_labels = {
     0: "aeroponics",
     1: "aquaponics",
     2: "hydroponics"
-}
-
-outdoor_labels = {
-    0: "ampalaya",
-    1: "eggplant",
-    2: "hot pepper",
-    3: "okra",
-    4: "patola",
-    5: "sitao",
-    6: "squash",
-    7: "tomato",
-    8: "upo"
 }
 
 # --------------------
@@ -87,7 +81,8 @@ class OutdoorData(BaseModel):
 # --------------------
 app = FastAPI()
 
-app.mount("/pdfs", StaticFiles(directory="pdfs"), name="pdfs")
+# Serve PDFs
+# app.mount("/pdfs", StaticFiles(directory="pdfs"), name="pdfs")
 
 app.add_middleware(
     CORSMiddleware,
@@ -102,26 +97,26 @@ app.add_middleware(
 # --------------------
 @app.post("/predict-indoor")
 def predict_indoor(data: IndoorData):
-    values = np.array([[
-    data.Space_Size,
-    data.Power_Reliability,
-    data.Lighting,
-    data.Water_Accessibility,
-    data.Water_Chemistry,
-    data.Temperature_Control,
-    data.Ventilation,
-    data.Budget,
-    data.Time_Available,
-    data.Noise_Tolerance,
-    data.Biosecurity,
-    data.Nutrient_Source,
-    data.Aquaculture,
-    data.Purpose,
-    data.Experience
-]])
+    values = np.array([[ 
+        data.Space_Size,
+        data.Power_Reliability,
+        data.Lighting,
+        data.Water_Accessibility,
+        data.Water_Chemistry,
+        data.Temperature_Control,
+        data.Ventilation,
+        data.Budget,
+        data.Time_Available,
+        data.Noise_Tolerance,
+        data.Biosecurity,
+        data.Nutrient_Source,
+        data.Aquaculture,
+        data.Purpose,
+        data.Experience
+    ]])
 
     pred = indoor_model.predict(values)[0]
-    method = indoor_labels[pred]
+    method = indoor_labels.get(pred, str(pred))
 
     return {
         "recommendation": method,
@@ -132,14 +127,18 @@ def predict_indoor(data: IndoorData):
 
 
 # --------------------
-# Outdoor prediction
+# Outdoor prediction (FIXED)
 # --------------------
 @app.post("/predict-outdoor")
 def predict_outdoor(data: OutdoorData):
-    if outdoor_model is None:
-        return JSONResponse(status_code=500, content={"error": "Outdoor model not loaded"})
+    if outdoor_model is None or scaler_outdoor is None or label_mapping_outdoor is None:
+        return JSONResponse(
+            status_code=500,
+            content={"error": "Outdoor model assets not loaded"}
+        )
     
     try:
+        # Build feature array
         values = np.array([[ 
             data.Space_Size,
             data.Soil_Type,
@@ -158,16 +157,25 @@ def predict_outdoor(data: OutdoorData):
             data.Farming_Experience
         ]])
 
+        # ✅ Apply scaler (VERY IMPORTANT)
+        values = scaler_outdoor.transform(values)
+
+        # Predict
         pred = outdoor_model.predict(values)[0]
-        label = outdoor_labels.get(pred, str(pred))
+
+        # ✅ Decode using saved mapping
+        label = label_mapping_outdoor.get(pred, str(pred))
 
         return {
             "recommendation": label,
-            "description": f"Recommended crop: {label}",
+            "description": f"Recommended category: {label}",
             "type": "outdoor",
             "video_id": label
         }
 
     except Exception as e:
         print(f"Prediction error: {e}")
-        return JSONResponse(status_code=500, content={"error": "Prediction failed"})
+        return JSONResponse(
+            status_code=500,
+            content={"error": "Prediction failed"}
+        )

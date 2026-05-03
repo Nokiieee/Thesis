@@ -43,7 +43,7 @@ const Result = () => {
 
       try {
         const res = await fetch(
-          "https://thesis-ljvg.onrender.com/predict-indoor", // http://localhost:8000/predict-indoor | https://thesis-ljvg.onrender.com/predict-indoor
+          "http://localhost:8000/predict-indoor", // http://localhost:8000/predict-indoor | https://thesis-ljvg.onrender.com/predict-indoor
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },

@@ -119,8 +119,8 @@ const PdfPage = () => {
     document.body.removeChild(link);
   };
 
-  const handleView = async (fileUrl: string) => {
-    await Browser.open({ url: fileUrl });
+  const handleView = (id: string) => {
+    navigate(`/pdf/${id}`);
   };
 
   return (
@@ -152,7 +152,7 @@ const PdfPage = () => {
                   key={pdf.id}
                   pdf={pdf}
                   onDownload={() => handleDownload(pdf.fileUrl, pdf.title)}
-                  onView={() => handleView(pdf.fileUrl)}
+                  onView={() => handleView(pdf.id)}
                 />
               ))}
             </div>
@@ -167,7 +167,7 @@ const PdfPage = () => {
                   key={pdf.id}
                   pdf={pdf}
                   onDownload={() => handleDownload(pdf.fileUrl, pdf.title)}
-                  onView={() => handleView(pdf.fileUrl)}
+                  onView={() => handleView(pdf.id)}
                 />
               ))}
             </div>
@@ -219,12 +219,6 @@ const ZoomCard = ({ pdf, onDownload, onView }: ZoomCardProps) => {
             onClick={onView}
           >
             View
-          </Button>
-          <Button
-            style={{ backgroundColor: "#628141", color: "white" }}
-            onClick={onDownload}
-          >
-            Download
           </Button>
         </div>
       </Card>

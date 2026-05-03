@@ -17,81 +17,136 @@ const indoorQuestions: Question[] = [
   {
     id: "available_space",
     question: "How much indoor space can you dedicate to your setup?",
-    options: ["Small", "Medium", "Large"],
+    options: [
+      "Small: A countertop, closet, or tiny corner.",
+      "Medium: A spare room, balcony, or small home greenhouse.",
+      "Large: A dedicated warehouse or commercial greenhouse space.",
+    ],
   },
   {
     id: "power_availability",
     question: "How stable is your electricity and backup power?",
-    options: ["Unreliable", "Moderate", "Highly Stable"],
+    options: [
+      "Unreliable: Power goes out often and I have no backup battery or generator.",
+      "Moderate: Occasional outages, but I can manually start a generator if needed.",
+      "Highly Stable: Power is constant or I have an automatic backup (UPS) that kicks in instantly.",
+    ],
   },
   {
     id: "lighting_setup",
     question: "What kind of light will your plants receive?",
     options: [
-      "Low Natural Light",
-      "Basic Artificial Light",
-      "High-Intensity Light",
+      "Low Natural Light: Only sunlight from a nearby standard window.",
+      "Basic Artificial Light: Standard fluorescent tubes or basic LED grow lights.",
+      "High-Intensity Light: Professional high-wattage LED grow lights or full sun in a greenhouse.",
     ],
   },
   {
     id: "access_to_water",
     question: "How easy is it to get water to and from your setup?",
-    options: ["Low", "Moderate", "High"],
+    options: [
+      "Low: I have to carry water by hand/buckets and there are no floor drains.",
+      "Moderate: I can easily use a hose or refill a medium water tank nearby.",
+      "High: I have direct plumbing, faucets, and floor drains in the room.",
+    ],
   },
   {
     id: "pH_monitoring",
     question: "Are you willing to test the water chemistry every day?",
-    options: ["None", "Daily Manual", "Advanced"],
+    options: [
+      "None: No, I just want to use plain tap water without any testing.",
+      "Daily Manual: Yes, I can use handheld pens to test and adjust the water every day.",
+      "Advanced: Yes, I will use automated machines that monitor and fix the water 24/7.",
+    ],
   },
   {
     id: "avg_temp",
     question: "How much control do you have over the room's temperature?",
-    options: ["Poor", "Moderate", "Excellent"],
+    options: [
+      "Poor: Very little; the room gets very hot or cold depending on the weather.",
+      "Moderate: Some control using basic fans, window A/C, or home heaters.",
+      "Excellent: Strict control using a professional HVAC or climate system.",
+    ],
   },
   {
     id: "ventilation_quality",
     question: "How is the air circulation in your growing area?",
-    options: ["Stagnant", "Moderate", "High"],
+    options: [
+      "Stagnant: A closed room with still air and no fans.",
+      "Moderate: Decent airflow using basic fans or open windows.",
+      "High: Strong airflow using exhaust fans and professional ventilation.",
+    ],
   },
   {
     id: "capital_budget",
     question: "What is your budget for equipment (pumps, towers, and lights)?",
-    options: ["Low", "Medium", "High"],
+    options: [
+      "Low: Minimal budget; I plan to use DIY setups and recycled materials.",
+      "Medium: I can buy standard water pumps, air stones, and PVC pipes.",
+      "High: I am willing to invest in professional towers or high-pressure misting kits.",
+    ],
   },
   {
     id: "daily_time_commitment",
     question: "How much time can you spend on daily maintenance?",
-    options: ["10 to 30 Minutes", "30 to 60 Minutes", "Over 60 Minutes"],
+    options: [
+      "10 to 30 Minutes: Just enough for a quick daily check and to see if plants are wilting.",
+      "30 to 60 Minutes: Enough for daily cleaning, refilling water, and checking for bugs.",
+      "Over 60 Minutes: Enough for deep cleaning nozzles and checking every single leaf and root.",
+    ],
   },
   {
     id: "noise_tolerance",
     question: "How much equipment noise is allowed in the area?",
-    options: ["Silent", "Low Hum", "Loud"],
+    options: [
+      "Silent: It must be completely quiet (like a bedroom).",
+      "Low Hum: Soft bubbling or small pump sounds are okay.",
+      "Loud: Water splashing and loud misting sounds are perfectly fine.",
+    ],
   },
   {
     id: "cleanliness",
     question: "How clean and isolated is your growing area?",
-    options: ["Low", "Moderate", "High"],
+    options: [
+      "Low: Open area where pets, dust, and outside air come in easily.",
+      "Moderate: A dedicated, reasonably clean room inside a house.",
+      'High: A sealed, sanitized room with strict "no-germs" protocols.',
+    ],
   },
   {
     id: "nutrient_method",
     question: "How do you want to provide nutrients to your plants?",
-    options: ["Natural/Fish Waste", "Liquid Mix", "Chemical Mix"],
+    options: [
+      "Natural/Fish Waste: Using a natural ecosystem with fish (Aquaponics).",
+      "Liquid Mix: Using simple, ready-to-mix liquid plant food.",
+      "Chemical Mix: Precisely measuring and mixing raw minerals and salts.",
+    ],
   },
   {
     id: "interest_in_fish",
     question: "Are you interested in raising fish along with your plants?",
-    options: ["No", "Yes"], // ✅ FIXED
+    options: [
+      "No: I only want to grow plants.",
+      "Yes: I want to manage fish feeding and fish tank cleaning every day.",
+    ],
   },
   {
     id: "goal_type",
     question: "What is your primary reason for planting?",
-    options: ["Personal", "Small-scale", "Commercial"],
+    options: [
+      "Personal: Just for me and my family to eat.",
+      "Small-scale: Selling a little bit to neighbors or at a local market.",
+      "Commercial: Mass production for a serious business.",
+    ],
   },
   {
     id: "training_experience",
     question: "How much experience do you have with technical farming?",
-    options: ["Beginner", "Intermediate", "Experienced"],
+    options: [
+      "Beginner: I am new to water pumps, nutrients, and soilless farming.",
+      "Intermediate: I understand basic plumbing and manual water testing.",
+      "Experienced: I can fix equipment and spot plant problems just by looking at them.",
+    ],
   },
 ];
 
@@ -117,76 +172,64 @@ const frontendToDatasetKey: Record<string, string> = {
 };
 
 const optionToNumber = (questionId: string, value: string) => {
+  const label = value.split(":")[0].trim();
+
   const map: Record<string, Record<string, number>> = {
-    available_space: {
-      Small: 0,
-      Medium: 1,
-      Large: 2,
-    },
+    available_space: { Small: 0, Medium: 1, Large: 2 },
+
     power_availability: {
       Unreliable: 0,
       Moderate: 1,
       "Highly Stable": 2,
     },
+
     lighting_setup: {
       "Low Natural Light": 0,
       "Basic Artificial Light": 1,
       "High-Intensity Light": 2,
     },
-    access_to_water: {
-      Low: 0,
-      Moderate: 1,
-      High: 2,
-    },
+
+    access_to_water: { Low: 0, Moderate: 1, High: 2 },
+
     pH_monitoring: {
       None: 0,
       "Daily Manual": 1,
       Advanced: 2,
     },
-    avg_temp: {
-      Poor: 0,
-      Moderate: 1,
-      Excellent: 2,
-    },
-    ventilation_quality: {
-      Stagnant: 0,
-      Moderate: 1,
-      High: 2,
-    },
-    capital_budget: {
-      Low: 0,
-      Medium: 1,
-      High: 2,
-    },
+
+    avg_temp: { Poor: 0, Moderate: 1, Excellent: 2 },
+
+    ventilation_quality: { Stagnant: 0, Moderate: 1, High: 2 },
+
+    capital_budget: { Low: 0, Medium: 1, High: 2 },
+
     daily_time_commitment: {
       "10 to 30 Minutes": 0,
       "30 to 60 Minutes": 1,
       "Over 60 Minutes": 2,
     },
-    noise_tolerance: {
-      Silent: 0,
-      "Low Hum": 1,
-      Loud: 2,
-    },
-    cleanliness: {
-      Low: 0,
-      Moderate: 1,
-      High: 2,
-    },
+
+    noise_tolerance: { Silent: 0, "Low Hum": 1, Loud: 2 },
+
+    cleanliness: { Low: 0, Moderate: 1, High: 2 },
+
     nutrient_method: {
       "Natural/Fish Waste": 0,
       "Liquid Mix": 1,
       "Chemical Mix": 2,
     },
+
     interest_in_fish: {
       No: 0,
-      Yes: 2,
+      Yes: 2, // intentional weighting
     },
+
     goal_type: {
       Personal: 0,
       "Small-scale": 1,
       Commercial: 2,
     },
+
     training_experience: {
       Beginner: 0,
       Intermediate: 1,
@@ -194,7 +237,7 @@ const optionToNumber = (questionId: string, value: string) => {
     },
   };
 
-  return map[questionId]?.[value] ?? 0;
+  return map[questionId]?.[label] ?? 0;
 };
 
 // --------------------

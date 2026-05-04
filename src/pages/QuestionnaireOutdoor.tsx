@@ -348,12 +348,13 @@ const QuestionnaireOutdoor = () => {
             </button>
             <button
               onClick={handleNext}
-              className="py-2 px-4 rounded-md font-medium transition-colors"
+              className="py-2 px-3 rounded-md font-medium transition-colors flex items-center justify-center"
               style={{ backgroundColor: "#628141", color: "white" }}
             >
               {step + 1 === questions.length ? (
                 <>
-                  <Sparkles className="w-5 h-5 mr-2" /> Finish
+                  <Sparkles className="w-5 h-5 mr-2" />
+                  Finish
                 </>
               ) : (
                 "Next"

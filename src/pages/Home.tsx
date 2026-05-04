@@ -38,7 +38,7 @@ const slides = [
   },
 ];
 
-const HEADER_HEIGHT = 160; // adjust based on your header height
+const HEADER_HEIGHT = 160;
 
 const Home = () => {
   const navigate = useNavigate();
@@ -50,6 +50,9 @@ const Home = () => {
     return sessionStorage.getItem("hasLoaded") ? false : true;
   });
 
+  /* =========================
+     LOADING SCREEN
+  ========================== */
   useEffect(() => {
     if (!loading) return;
 
@@ -61,10 +64,33 @@ const Home = () => {
     return () => clearTimeout(timer);
   }, [loading]);
 
-  // Detect active slide based on center between header bottom and screen bottom
+  /* =========================
+     GLOBAL 1-MINUTE INTERVAL
+  ========================== */
+  useEffect(() => {
+    const interval = setInterval(() => {
+      console.log("🔄 Global 1-minute background task running");
+
+      // Example 1: warm backend (avoid cold start)
+      fetch("https://thesis-ljvg.onrender.com/ping").catch(() => {});
+
+      // Example 2: preload or refresh cached data
+      // localStorage.setItem("lastSync", Date.now().toString());
+
+      // Example 3: prefetch recommendation if needed
+      // fetch("https://thesis-ljvg.onrender.com/predict-indoor")
+    }, 60000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  /* =========================
+     ACTIVE SLIDE DETECTION
+  ========================== */
   useEffect(() => {
     const handleScroll = () => {
       if (!containerRef.current) return;
+
       const slidesElements = containerRef.current.children;
       let closestIndex = 0;
       let closestDistance = Infinity;
@@ -74,6 +100,7 @@ const Home = () => {
       Array.from(slidesElements).forEach((child, index) => {
         const rect = (child as HTMLElement).getBoundingClientRect();
         const distance = Math.abs(rect.top + rect.height / 2 - centerY);
+
         if (distance < closestDistance) {
           closestDistance = distance;
           closestIndex = index;
@@ -85,12 +112,13 @@ const Home = () => {
 
     window.addEventListener("scroll", handleScroll);
     handleScroll();
+
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const renderSlide = (slide: (typeof slides)[number], index: number) => {
     const isActive = index === activeIndex;
-    const blur = isActive ? 0 : 4; // only blur, same size for all slides
+    const blur = isActive ? 0 : 4;
 
     return (
       <motion.div
@@ -140,7 +168,7 @@ const Home = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-secondary flex flex-col items-center relative">
-      {/* Fixed Header */}
+      {/* Header */}
       <div
         className="fixed top-0 left-0 w-full bg-gradient-to-b from-background to-secondary z-20 flex flex-col items-center py-6 shadow-md"
         style={{ height: HEADER_HEIGHT }}
@@ -152,7 +180,7 @@ const Home = () => {
         </p>
       </div>
 
-      {/* Fixed Burger/X Button */}
+      {/* Menu Button */}
       <button
         onClick={() => setMenuOpen((s) => !s)}
         className="fixed left-4 top-4 z-50 p-2 bg-white rounded-full shadow-md flex items-center justify-center"
@@ -174,38 +202,9 @@ const Home = () => {
             Smart Farming Assistant
           </p>
         </div>
-
-        <nav className="flex-1 flex flex-col mt-2 gap-2 px-4">
-          {slides.map((slide, index) => (
-            <button
-              key={slide.id}
-              onClick={() => {
-                const element = document.getElementById(slide.id);
-                if (element) {
-                  const rect = element.getBoundingClientRect();
-                  const scrollTop =
-                    window.scrollY +
-                    rect.top -
-                    HEADER_HEIGHT -
-                    (window.innerHeight - HEADER_HEIGHT) / 2 +
-                    rect.height / 2;
-                  window.scrollTo({ top: scrollTop, behavior: "smooth" });
-                }
-                setMenuOpen(false);
-              }}
-              className={`py-3 rounded-lg text-base font-medium ${
-                index === activeIndex
-                  ? "bg-green-400 text-white"
-                  : "bg-green-100 text-gray-800 hover:bg-green-200"
-              }`}
-            >
-              {slide.title.split(" ")[0]}
-            </button>
-          ))}
-        </nav>
       </motion.aside>
 
-      {/* Scrollable Slides */}
+      {/* Slides */}
       <div
         ref={containerRef}
         className="flex flex-col gap-16 w-full max-w-3xl mt-[180px] px-4 pb-16 overflow-y-auto snap-y snap-mandatory"

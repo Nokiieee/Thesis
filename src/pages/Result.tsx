@@ -1,9 +1,8 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { ArrowLeft, Play, Home } from "lucide-react";
+import { ArrowLeft, Play } from "lucide-react";
 import { useEffect, useState } from "react";
-
 import Spinner from "./Spinner";
 
 type BackendResponse = {
@@ -13,58 +12,111 @@ type BackendResponse = {
   video_id: string;
 };
 
+const BASE_URL = "https://thesis-ljvg.onrender.com";
+
 const logoPath = (name: string) =>
   `/logos/${name.toLowerCase().replace(/\s+/g, "-")}.png`;
+
 const pdfPath = (name: string) =>
-  `/pdfs/${name.toLowerCase().replace(/\s+/g, "-")}.pdf`;
+  `${BASE_URL}/pdfs/${name.toLowerCase().replace(/\s+/g, "-")}.pdf`;
+
+/* -------------------------
+   🧠 INDOOR STEP DATA
+--------------------------*/
+const indoorData: Record<string, { title: string; steps: string[] }> = {
+  hydroponics: {
+    title: "Hydroponics",
+    steps: [
+      "Hydroponics is a method of growing lettuce without soil using nutrient-rich water.",
+      "Prepare a reservoir tank to store water and nutrients.",
+      "Install PVC pipes or grow channels for plant placement.",
+      "Place net cups to hold lettuce seedlings.",
+      "Mix water with hydroponic nutrient solution.",
+      "Use a water pump to circulate the solution.",
+      "Ensure roots are constantly exposed to nutrient flow.",
+      "Check pH level between 5.5 and 6.5 for best growth.",
+      "Provide proper lighting or sunlight exposure.",
+      "Monitor water level and nutrient concentration daily.",
+      "Clean system regularly to avoid algae buildup.",
+      "Harvest lettuce after 30–45 days when leaves are fully grown.",
+    ],
+  },
+
+  aquaponics: {
+    title: "Aquaponics",
+    steps: [
+      "Aquaponics combines fish farming (tilapia) and lettuce growing in one system.",
+      "Set up a fish tank for tilapia.",
+      "Build a grow bed filled with gravel or clay pebbles.",
+      "Install a water pump and piping system.",
+      "Connect fish tank and grow bed for water circulation.",
+      "Add tilapia carefully into the tank.",
+      "Plant lettuce seedlings in the grow bed.",
+      "Beneficial bacteria convert fish waste into nutrients.",
+      "Maintain water pH between 6.0 and 7.0.",
+      "Feed fish daily and monitor system flow.",
+      "Clean filters and remove waste buildup regularly.",
+      "Harvest lettuce in 30–45 days and tilapia in 4–6 months.",
+    ],
+  },
+
+  aeroponics: {
+    title: "Aeroponics",
+    steps: [
+      "Aeroponics grows lettuce with roots suspended in air and misted with nutrients.",
+      "Build vertical PVC grow chambers.",
+      "Drill holes for net cups placement.",
+      "Install internal misting pipes with spray nozzles.",
+      "Connect system to a nutrient reservoir.",
+      "Install a water pump for mist circulation.",
+      "Prepare nutrient solution in reservoir tank.",
+      "Place lettuce seedlings with exposed roots.",
+      "Run misting cycle at regular intervals.",
+      "Ensure roots receive fine nutrient mist.",
+      "Check for leaks and system pressure.",
+      "Clean system and replace nutrient solution regularly.",
+      "Harvest lettuce in 30–45 days.",
+    ],
+  },
+};
 
 const Result = () => {
   const location = useLocation();
   const navigate = useNavigate();
+
   const [recommendation, setRecommendation] = useState<BackendResponse | null>(
     null,
   );
+
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    console.log("RESULT PAGE LOADED");
-
     const data = location.state;
-    console.log("DATA:", data);
 
     if (!data) {
-      console.log("NO DATA → redirecting");
       navigate("/");
       return;
     }
 
     const fetchPrediction = async () => {
-      console.log("FETCH STARTED");
-
       try {
-        const res = await fetch(
-          "https://thesis-ljvg.onrender.com/predict-indoor", // http://localhost:8000/predict-indoor | https://thesis-ljvg.onrender.com/predict-indoor
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(data),
-          },
-        );
+        const url =
+          data.type === "outdoor"
+            ? `${BASE_URL}/predict-outdoor`
+            : `${BASE_URL}/predict-indoor`;
 
-        console.log("FETCH SENT");
+        const res = await fetch(url, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        });
 
         const json = await res.json();
-        console.log("RESPONSE:", json);
 
-        if (!res.ok) {
-          throw new Error(json?.detail || "Backend error");
-        }
-
-        setRecommendation(json);
+        if (!res.ok) throw new Error(json?.detail || "Backend error");
 
         setRecommendation(json);
       } catch (err) {
-        console.error("FETCH ERROR:", err);
         alert("Failed to load recommendation from server.");
       } finally {
         setLoading(false);
@@ -74,26 +126,24 @@ const Result = () => {
     fetchPrediction();
   }, [location.state, navigate]);
 
-  if (loading)
+  if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <Spinner loading={loading} />
+        <Spinner loading={true} />
       </div>
     );
+  }
 
   if (!recommendation) return null;
 
-  const logoSrc = recommendation?.recommendation
-    ? logoPath(recommendation.recommendation)
-    : "";
+  const id = recommendation.recommendation.toLowerCase().replace(/\s+/g, "-");
 
-  const pdfFile = recommendation?.recommendation
-    ? pdfPath(recommendation.recommendation)
-    : "";
+  const crop = indoorData[id]; // 👈 MATCH INDOOR STEPS
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-secondary p-4">
       <div className="max-w-2xl mx-auto">
+        {/* HEADER (UNCHANGED AS REQUESTED) */}
         <header className="py-6 flex items-center gap-4">
           <Button variant="ghost" size="icon" onClick={() => navigate("/")}>
             <ArrowLeft className="w-6 h-6" />
@@ -102,49 +152,70 @@ const Result = () => {
         </header>
 
         <div className="space-y-6">
+          {/* MAIN CARD (same style direction as Crops.tsx) */}
           <Card className="p-8 text-center">
+            {/* ICON (KEPT) */}
             <div className="flex justify-center mb-6">
               <div className="w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center overflow-hidden">
                 <img
-                  src={logoSrc}
+                  src={logoPath(recommendation.recommendation)}
                   alt="Farming Logo"
                   className="w-20 h-20 object-contain"
                 />
               </div>
             </div>
 
+            {/* TITLE */}
             <h2 className="text-3xl font-bold mb-2">
               {recommendation.recommendation}
             </h2>
+
+            {/* TYPE */}
             <div className="inline-block px-4 py-1 bg-primary/10 text-primary rounded-full text-sm font-medium mb-4">
-              {recommendation.type === "indoor"
-                ? "Indoor Farming"
-                : "Outdoor Farming"}
+              Indoor Farming
             </div>
+
+            {/* DESCRIPTION */}
             <p className="text-muted-foreground text-lg">
               {recommendation.description}
             </p>
           </Card>
 
+          {/* STEP-BY-STEP (LIKE Crops.tsx) */}
+          {crop && (
+            <Card className="overflow-hidden p-6 space-y-4">
+              <h2 className="text-base font-semibold uppercase text-muted-foreground">
+                Step-by-step Guide
+              </h2>
+
+              {crop.steps.map((step, index) => (
+                <div key={index} className="flex gap-4">
+                  <div className="w-7 h-7 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-semibold">
+                    {index + 1}
+                  </div>
+                  <p className="text-sm text-foreground/80">{step}</p>
+                </div>
+              ))}
+            </Card>
+          )}
+
+          {/* ACTION BUTTONS */}
           <Card className="p-6 space-y-4">
             <Button
               className="w-full"
               size="lg"
               style={{ backgroundColor: "#479941", color: "white" }}
-              onClick={() =>
-                navigate(
-                  `/video/${recommendation.recommendation.toLowerCase().replace(/\s+/g, "-")}`,
-                )
-              }
+              onClick={() => navigate(`/video/${id}`)}
             >
-              <Play className="w-5 h-5 mr-2" /> Watch Tutorial Video
+              <Play className="w-5 h-5 mr-2" />
+              Watch Video Tutorial
             </Button>
 
             <Button
               className="w-full"
               size="lg"
               style={{ backgroundColor: "#52b14b", color: "white" }}
-              onClick={() => window.open(pdfFile, "_blank")}
+              onClick={() => navigate(`/pdf/${id}`)}
             >
               View PDF Guide
             </Button>

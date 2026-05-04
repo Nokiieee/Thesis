@@ -133,7 +133,7 @@ const PdfPage = () => {
           </Button>
           <div>
             <h1 className="text-2xl font-bold">PDF Guides</h1>
-            <p className="text-muted-foreground">Offline farming guides</p>
+            <p className="text-muted-foreground">Farming guides</p>
           </div>
         </header>
 

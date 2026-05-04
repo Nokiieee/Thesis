@@ -191,8 +191,10 @@ const Crops = () => {
   return (
     <div className="min-h-screen p-6 bg-gradient-to-b from-background to-secondary">
       <div className="max-w-2xl mx-auto space-y-6">
+        {/* BACK BUTTON */}
         <Button onClick={() => navigate(-1)}>← Back</Button>
 
+        {/* STEP + HEADER (KEPT TOGETHER — DO NOT SPLIT) */}
         <Card className="overflow-hidden">
           {/* Header band inside the card */}
           <div className="px-6 py-5 border-b">
@@ -210,43 +212,41 @@ const Crops = () => {
 
             {crop.steps.map((step: string, index: number) => (
               <div key={index} className="flex gap-4 group">
-                {/* Number + connector line */}
                 <div className="flex flex-col items-center flex-shrink-0">
                   <div className="w-7 h-7 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-semibold ring-1 ring-primary/20">
                     {index + 1}
                   </div>
+
                   {index < crop.steps.length - 1 && (
                     <div className="w-px flex-1 bg-border mt-1 min-h-[16px]" />
                   )}
                 </div>
 
-                {/* Step text */}
                 <p className="text-sm leading-relaxed pb-3 pt-1 text-foreground/80 group-last:pb-0">
                   {step}
                 </p>
               </div>
             ))}
-
-            <div className="px-2 pb-6 flex flex-col gap-3">
-              {/* PDF Button */}
-              <Button
-                className="w-full"
-                style={{ backgroundColor: "#6aa357", color: "white" }}
-                onClick={() => navigate(`/pdf/${id}`)}
-              >
-                View PDF Guide
-              </Button>
-
-              {/* VIDEO Button */}
-              <Button
-                className="w-full"
-                style={{ backgroundColor: "#479941", color: "white" }}
-                onClick={() => navigate(`/video/${id}`)}
-              >
-                Watch Video Tutorial
-              </Button>
-            </div>
           </div>
+        </Card>
+
+        {/* BUTTONS ONLY (SEPARATE LIKE RESULT.TSX) */}
+        <Card className="p-6 space-y-4">
+          <Button
+            className="w-full"
+            style={{ backgroundColor: "#6aa357", color: "white" }}
+            onClick={() => navigate(`/pdf/${id}`)}
+          >
+            View PDF Guide
+          </Button>
+
+          <Button
+            className="w-full"
+            style={{ backgroundColor: "#479941", color: "white" }}
+            onClick={() => navigate(`/video/${id}`)}
+          >
+            Watch Video Tutorial
+          </Button>
         </Card>
       </div>
     </div>

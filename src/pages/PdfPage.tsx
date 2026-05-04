@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
-import { Browser } from "@capacitor/browser";
 
 type PdfItem = {
   id: string;
@@ -107,8 +106,8 @@ const pdfs: PdfItem[] = [
 const PdfPage = () => {
   const navigate = useNavigate();
 
-  const indoorPdfs = pdfs.filter((pdf) => pdf.category === "Indoor Farming");
-  const outdoorPdfs = pdfs.filter((pdf) => pdf.category === "Lowland Crops");
+  const indoorPdfs = pdfs.filter((p) => p.category === "Indoor Farming");
+  const outdoorPdfs = pdfs.filter((p) => p.category === "Lowland Crops");
 
   const handleDownload = (fileUrl: string, title: string) => {
     const link = document.createElement("a");
@@ -119,8 +118,9 @@ const PdfPage = () => {
     document.body.removeChild(link);
   };
 
-  const handleView = (id: string) => {
-    navigate(`/pdf/${id}`);
+  // ✅ FINAL FIX: direct open Render PDF
+  const handleView = (fileUrl: string) => {
+    window.location.href = fileUrl; // or window.open(fileUrl, "_blank");
   };
 
   return (
@@ -141,33 +141,35 @@ const PdfPage = () => {
           className="flex flex-col gap-8 overflow-y-auto"
           style={{ height: "calc(100vh - 6rem)" }}
         >
-          {/* Indoor Farming PDFs */}
+          {/* Indoor */}
           <section>
             <h2 className="text-xl font-semibold mb-4">
               Indoor Farming Methods
             </h2>
+
             <div className="space-y-4">
               {indoorPdfs.map((pdf) => (
                 <ZoomCard
                   key={pdf.id}
                   pdf={pdf}
                   onDownload={() => handleDownload(pdf.fileUrl, pdf.title)}
-                  onView={() => handleView(pdf.id)}
+                  onView={() => handleView(pdf.fileUrl)}
                 />
               ))}
             </div>
           </section>
 
-          {/* Lowland Crops PDFs */}
+          {/* Outdoor */}
           <section>
             <h2 className="text-xl font-semibold mb-4">Lowland Crops</h2>
+
             <div className="space-y-4">
               {outdoorPdfs.map((pdf) => (
                 <ZoomCard
                   key={pdf.id}
                   pdf={pdf}
                   onDownload={() => handleDownload(pdf.fileUrl, pdf.title)}
-                  onView={() => handleView(pdf.id)}
+                  onView={() => handleView(pdf.fileUrl)}
                 />
               ))}
             </div>

@@ -12,7 +12,6 @@ import Result from "./pages/Result";
 import Tutorials from "./pages/Tutorials";
 import VideoPlayer from "./pages/VideoPlayer";
 import PdfPage from "./pages/PdfPage";
-import PdfViewer from "./pages/PdfViewer";
 import NotFound from "./pages/NotFound";
 import ResultOutdoor from "@/pages/ResultOutdoor";
 import Crops from "./pages/Crops";
@@ -49,7 +48,6 @@ const App = () => (
           <Route path="/crop/:id" element={<Crops />} />
 
           {/* PDFs */}
-          <Route path="/pdf/:pdfId" element={<PdfViewer />} />
           <Route path="/pdfs" element={<PdfPage />} />
 
           {/* Fallback */}

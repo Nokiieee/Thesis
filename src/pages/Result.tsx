@@ -215,7 +215,12 @@ const Result = () => {
               className="w-full"
               size="lg"
               style={{ backgroundColor: "#52b14b", color: "white" }}
-              onClick={() => navigate(`/pdf/${id}`)}
+              onClick={() => {
+                const pdfUrl = `${BASE_URL}/pdfs/${id}.pdf`;
+
+                // 🚀 direct open (instant, no loading page)
+                window.location.href = pdfUrl;
+              }}
             >
               View PDF Guide
             </Button>

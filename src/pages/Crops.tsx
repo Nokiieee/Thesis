@@ -235,7 +235,12 @@ const Crops = () => {
           <Button
             className="w-full"
             style={{ backgroundColor: "#6aa357", color: "white" }}
-            onClick={() => navigate(`/pdf/${id}`)}
+            onClick={() => {
+              const pdfUrl = `https://thesis-ljvg.onrender.com/pdfs/${id}.pdf`;
+
+              // 🚀 instant open (no React route, no loading screen)
+              window.location.href = pdfUrl;
+            }}
           >
             View PDF Guide
           </Button>

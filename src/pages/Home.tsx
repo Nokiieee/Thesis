@@ -42,7 +42,6 @@ const HEADER_HEIGHT = 160;
 
 const Home = () => {
   const navigate = useNavigate();
-  const [menuOpen, setMenuOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -180,18 +179,9 @@ const Home = () => {
         </p>
       </div>
 
-      {/* Menu Button */}
-      <button
-        onClick={() => setMenuOpen((s) => !s)}
-        className="fixed left-4 top-4 z-50 p-2 bg-white rounded-full shadow-md flex items-center justify-center"
-      >
-        {menuOpen ? <X size={22} /> : <Menu size={22} />}
-      </button>
-
       {/* Sidebar */}
       <motion.aside
         initial={{ x: -220 }}
-        animate={{ x: menuOpen ? 0 : -220 }}
         transition={{ type: "spring", stiffness: 300, damping: 30 }}
         className="fixed left-0 top-0 h-full w-48 bg-gradient-to-b from-background to-secondary rounded-r-xl shadow-xl z-40 flex flex-col"
       >

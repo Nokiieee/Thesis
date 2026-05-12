@@ -30,10 +30,10 @@ const slides = [
   },
   {
     id: "pdfs",
-    title: "Download PDFs",
-    description: "Get offline PDFs with farming guides and best practices.",
+    title: "PDF Guides",
+    description: "View PDF farming guides and best practices.",
     logo: PdfLogo,
-    buttonText: "Download PDFs",
+    buttonText: "PDF Guides",
     route: "/pdfs",
   },
 ];

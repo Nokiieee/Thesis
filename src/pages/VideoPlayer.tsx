@@ -1,10 +1,11 @@
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ArrowLeft } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
-import { AnimatePresence, motion } from "framer-motion";
-import { useLocation } from "react-router-dom";
+
+import { cropData } from "@/data/cropData";
+import { indoorData } from "@/data/indoorData";
 
 const VideoPlayer = () => {
   const location = useLocation();
@@ -12,101 +13,101 @@ const VideoPlayer = () => {
 
   const { videoId } = useParams();
   const navigate = useNavigate();
-  const [showConfirm, setShowConfirm] = useState(false);
+
   const videoRef = useRef<HTMLVideoElement>(null);
+
+  // 🌐 Language state
+  const [language, setLanguage] = useState<"en" | "tl">("en");
+
+  // Combine outdoor + indoor guides
+  const allGuides = {
+    ...cropData,
+    ...indoorData,
+  };
 
   // All available videos
   const videoData: Record<
     string,
     {
       title: string;
-      description: string;
-      shortDescription?: string;
       file: string;
     }
   > = {
     hydroponics: {
       title: "Hydroponics Guide",
-      description: "Learn how to set up and maintain a hydroponic system.",
-      shortDescription: "Set up and maintain your hydroponic system easily.",
       file: "/videos/hydroponics.mp4",
     },
+
     aquaponics: {
       title: "Aquaponics System Setup",
-      description: "Create a sustainable aquaponics ecosystem.",
-      shortDescription: "Build a sustainable aquaponics system.",
       file: "/videos/aquaponics.mp4",
     },
+
     aeroponics: {
       title: "Aeroponics Advanced",
-      description: "Grow plants with suspended roots.",
-      shortDescription: "Learn advanced aeroponics techniques.",
       file: "/videos/aeroponics.mp4",
     },
+
     upo: {
       title: "Growing Upo (Bottle Gourd)",
-      description: "Complete guide for Bottle Gourd.",
-      shortDescription: "Grow healthy Bottle Gourd with ease.",
       file: "/videos/upo.mp4",
     },
+
     ampalaya: {
       title: "Ampalaya (Bitter Gourd) Farming",
-      description: "Best practices for bitter gourd cultivation.",
-      shortDescription: "Master bitter gourd farming techniques.",
       file: "/videos/ampalaya.mp4",
     },
+
     patola: {
       title: "Patola (Sponge Gourd) Guide",
-      description: "Step-by-step tutorial for patola farming.",
-      shortDescription: "Learn how to grow patola efficiently.",
       file: "/videos/patola.mp4",
     },
+
     eggplant: {
       title: "Eggplant Cultivation",
-      description: "How to grow healthy eggplants.",
-      shortDescription: "Grow eggplants with maximum yield.",
       file: "/videos/eggplant.mp4",
     },
+
     sitaw: {
       title: "Sitaw (String Beans) Growing",
-      description: "Guide to productive sitaw farming.",
-      shortDescription: "Tips for high-yield sitaw farming.",
       file: "/videos/sitaw.mp4",
     },
+
     tomato: {
       title: "Tomato Farming Basics",
-      description: "Grow productive tomato plants.",
-      shortDescription: "Simple guide to growing tomatoes.",
       file: "/videos/tomato.mp4",
     },
+
     squash: {
       title: "Squash Growing Guide",
-      description: "Planting and caring for squash.",
-      shortDescription: "Learn to grow squash effectively.",
       file: "/videos/squash.mp4",
     },
+
     "hot-pepper": {
       title: "Hot Pepper Cultivation",
-      description: "Grow flavorful hot peppers.",
-      shortDescription: "Cultivate hot peppers with best practices.",
       file: "/videos/hot-pepper.mp4",
     },
+
     okra: {
       title: "Okra Farming Essentials",
-      description: "How to cultivate okra from planting to harvest.",
-      shortDescription: "Step-by-step okra farming guide.",
       file: "/videos/okra.mp4",
     },
   };
 
   const normalizeId = (id: string) => id.toLowerCase().replace(/\s+/g, "-");
-  const currentVideo = videoData[normalizeId(videoId ?? "")];
+
+  const normalizedVideoId = normalizeId(videoId ?? "");
+
+  const currentVideo = videoData[normalizedVideoId];
+
+  const currentGuide = allGuides[normalizedVideoId];
 
   if (!currentVideo) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-background to-secondary p-4 flex items-center justify-center">
         <Card className="p-6 text-center">
           <p className="mb-4">Video not found</p>
+
           <Button onClick={() => navigate("/tutorials")}>
             Back to Tutorials
           </Button>
@@ -118,7 +119,8 @@ const VideoPlayer = () => {
   // Lock landscape on fullscreen
   useEffect(() => {
     const handleFullScreenChange = () => {
-      const orientation = screen.orientation as any; // Type assertion
+      const orientation = screen.orientation as any;
+
       if (document.fullscreenElement && orientation?.lock) {
         orientation.lock("landscape").catch(() => {
           console.log("Orientation lock failed");
@@ -129,6 +131,7 @@ const VideoPlayer = () => {
     };
 
     document.addEventListener("fullscreenchange", handleFullScreenChange);
+
     return () => {
       document.removeEventListener("fullscreenchange", handleFullScreenChange);
     };
@@ -137,15 +140,17 @@ const VideoPlayer = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-secondary">
       <div className="max-w-4xl mx-auto">
+        {/* HEADER */}
         <header className="p-4 flex items-center gap-4">
           <Button variant="ghost" size="icon" onClick={() => navigate(-1)}>
             <ArrowLeft className="w-6 h-6" />
           </Button>
+
           <h1 className="text-xl font-bold">{currentVideo.title}</h1>
         </header>
 
         <div className="px-4 pb-4 space-y-4">
-          {/* Video Player */}
+          {/* VIDEO PLAYER */}
           <div className="aspect-video w-full max-h-[80vh] bg-black rounded-lg overflow-hidden">
             <video
               ref={videoRef}
@@ -156,67 +161,63 @@ const VideoPlayer = () => {
             />
           </div>
 
-          {/* Description Card */}
-          <Card className="p-6">
-            <h2 className="text-2xl font-bold mb-4">{currentVideo.title}</h2>
-            <p className="text-muted-foreground">
-              {currentVideo.shortDescription ?? currentVideo.description}
-            </p>
-          </Card>
+          {/* STEP-BY-STEP GUIDE */}
+          {currentGuide && (
+            <Card className="overflow-hidden">
+              {/* Header */}
+              <div className="px-6 py-5 border-b flex items-center justify-between gap-4">
+                <div>
+                  <h2 className="text-2xl font-bold">
+                    {language === "en"
+                      ? "Step-by-step Guide"
+                      : "Hakbang-hakbang na Gabay"}
+                  </h2>
 
-          {/* Back to Home Button */}
-          <div className="flex justify-center">
-            <Button
-              style={{ backgroundColor: "#628141", color: "white" }}
-              onClick={() => setShowConfirm(true)}
-            >
-              Back to Home
-            </Button>
-          </div>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    {currentGuide.steps[language].length}{" "}
+                    {language === "en" ? "steps included" : "na hakbang"}
+                  </p>
+                </div>
+
+                {/* 🌐 LANGUAGE TOGGLE BUTTON */}
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="flex items-center justify-center"
+                  onClick={() => setLanguage(language === "en" ? "tl" : "en")}
+                >
+                  {language === "en" ? "Tagalog" : "English"}
+                </Button>
+              </div>
+
+              {/* Steps */}
+              <div className="px-6 py-5 space-y-3">
+                {currentGuide.steps[language].map(
+                  (step: string, index: number) => (
+                    <div key={index} className="flex gap-4 group">
+                      {/* Number + Line */}
+                      <div className="flex flex-col items-center flex-shrink-0">
+                        <div className="w-7 h-7 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-semibold ring-1 ring-primary/20">
+                          {index + 1}
+                        </div>
+
+                        {index < currentGuide.steps[language].length - 1 && (
+                          <div className="w-px flex-1 bg-border mt-1 min-h-[16px]" />
+                        )}
+                      </div>
+
+                      {/* Text */}
+                      <p className="text-sm leading-relaxed pb-3 pt-1 text-foreground/80 group-last:pb-0">
+                        {step}
+                      </p>
+                    </div>
+                  ),
+                )}
+              </div>
+            </Card>
+          )}
         </div>
       </div>
-
-      {/* Confirmation Modal */}
-      <AnimatePresence>
-        {showConfirm && (
-          <motion.div
-            className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          >
-            <motion.div
-              className="w-full max-w-md"
-              initial={{ scale: 0.8, opacity: 0, y: -50 }}
-              animate={{ scale: 1, opacity: 1, y: 0 }}
-              exit={{ scale: 0.8, opacity: 0, y: -50 }}
-              transition={{ duration: 0.25 }}
-            >
-              <Card className="flex flex-col gap-4 p-6">
-                <h2 className="text-xl font-bold">Are you sure?</h2>
-                <p className="text-muted-foreground">
-                  Going back to Home will stop the video. Do you want to
-                  continue?
-                </p>
-                <div className="flex justify-end gap-2">
-                  <Button
-                    variant="outline"
-                    onClick={() => setShowConfirm(false)}
-                  >
-                    Cancel
-                  </Button>
-                  <Button
-                    style={{ backgroundColor: "#628141", color: "white" }}
-                    onClick={() => navigate("/")}
-                  >
-                    Yes, Go Back
-                  </Button>
-                </div>
-              </Card>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </div>
   );
 };

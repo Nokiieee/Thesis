@@ -279,27 +279,7 @@ const QuestionnaireOutdoor = () => {
       // Debug: check payload before sending
       console.log("Payload sent to backend:", payload);
 
-      // --------------------
-      // Call outdoor backend (note: backend runs on port 8001 in this setup)
-      // --------------------
-      fetch("https://thesis-ljvg.onrender.com/predict-outdoor", {
-        // http://localhost:8000/predict-outdoor | https://thesis-ljvg.onrender.com/predict-outdoor
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      })
-        .then((res) => {
-          if (!res.ok) {
-            console.error("Backend returned status:", res.status);
-            throw new Error("Backend error");
-          }
-          return res.json();
-        })
-        .then((data) => navigate("/result-outdoor", { state: payload }))
-        .catch((err) => {
-          console.error("Fetch error:", err);
-          toast.error("Failed to get outdoor prediction.");
-        });
+      navigate("/result-outdoor", { state: payload });
     } else {
       setStep(step + 1);
     }

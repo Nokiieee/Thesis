@@ -49,6 +49,8 @@ const ResultOutdoor = () => {
     }
 
     const fetchOutdoorPrediction = async () => {
+      setLoading(true); // ✅ force spinner immediately
+
       try {
         const res = await fetch(
           "https://thesis-ljvg.onrender.com/predict-outdoor",
@@ -62,6 +64,7 @@ const ResultOutdoor = () => {
         if (!res.ok) throw new Error("Outdoor backend error");
 
         const json: BackendResponse = await res.json();
+
         setRecommendation(json);
       } catch (err) {
         console.error(err);

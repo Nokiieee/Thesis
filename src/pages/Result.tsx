@@ -5,6 +5,8 @@ import { ArrowLeft, Play } from "lucide-react";
 import { useEffect, useState } from "react";
 import Spinner from "./Spinner";
 
+import { indoorData } from "@/data/indoorData";
+
 type BackendResponse = {
   recommendation: string;
   description: string;
@@ -17,72 +19,12 @@ const BASE_URL = "https://thesis-ljvg.onrender.com";
 const logoPath = (name: string) =>
   `/logos/${name.toLowerCase().replace(/\s+/g, "-")}.png`;
 
-const pdfPath = (name: string) =>
-  `${BASE_URL}/pdfs/${name.toLowerCase().replace(/\s+/g, "-")}.pdf`;
-
-/* -------------------------
-   🧠 INDOOR STEP DATA
---------------------------*/
-const indoorData: Record<string, { title: string; steps: string[] }> = {
-  hydroponics: {
-    title: "Hydroponics",
-    steps: [
-      "Hydroponics is a method of growing lettuce without soil using nutrient-rich water.",
-      "Prepare a reservoir tank to store water and nutrients.",
-      "Install PVC pipes or grow channels for plant placement.",
-      "Place net cups to hold lettuce seedlings.",
-      "Mix water with hydroponic nutrient solution.",
-      "Use a water pump to circulate the solution.",
-      "Ensure roots are constantly exposed to nutrient flow.",
-      "Check pH level between 5.5 and 6.5 for best growth.",
-      "Provide proper lighting or sunlight exposure.",
-      "Monitor water level and nutrient concentration daily.",
-      "Clean system regularly to avoid algae buildup.",
-      "Harvest lettuce after 30–45 days when leaves are fully grown.",
-    ],
-  },
-
-  aquaponics: {
-    title: "Aquaponics",
-    steps: [
-      "Aquaponics combines fish farming (tilapia) and lettuce growing in one system.",
-      "Set up a fish tank for tilapia.",
-      "Build a grow bed filled with gravel or clay pebbles.",
-      "Install a water pump and piping system.",
-      "Connect fish tank and grow bed for water circulation.",
-      "Add tilapia carefully into the tank.",
-      "Plant lettuce seedlings in the grow bed.",
-      "Beneficial bacteria convert fish waste into nutrients.",
-      "Maintain water pH between 6.0 and 7.0.",
-      "Feed fish daily and monitor system flow.",
-      "Clean filters and remove waste buildup regularly.",
-      "Harvest lettuce in 30–45 days and tilapia in 4–6 months.",
-    ],
-  },
-
-  aeroponics: {
-    title: "Aeroponics",
-    steps: [
-      "Aeroponics grows lettuce with roots suspended in air and misted with nutrients.",
-      "Build vertical PVC grow chambers.",
-      "Drill holes for net cups placement.",
-      "Install internal misting pipes with spray nozzles.",
-      "Connect system to a nutrient reservoir.",
-      "Install a water pump for mist circulation.",
-      "Prepare nutrient solution in reservoir tank.",
-      "Place lettuce seedlings with exposed roots.",
-      "Run misting cycle at regular intervals.",
-      "Ensure roots receive fine nutrient mist.",
-      "Check for leaks and system pressure.",
-      "Clean system and replace nutrient solution regularly.",
-      "Harvest lettuce in 30–45 days.",
-    ],
-  },
-};
-
 const Result = () => {
   const location = useLocation();
   const navigate = useNavigate();
+
+  // 🌐 Language state
+  const [language, setLanguage] = useState<"en" | "tl">("en");
 
   const [recommendation, setRecommendation] = useState<BackendResponse | null>(
     null,
@@ -138,23 +80,30 @@ const Result = () => {
 
   const id = recommendation.recommendation.toLowerCase().replace(/\s+/g, "-");
 
-  const crop = indoorData[id]; // 👈 MATCH INDOOR STEPS
+  const crop = indoorData[id];
+
+  // ✅ Get translated steps
+  const currentSteps =
+    language === "en" ? crop?.steps.en || [] : crop?.steps.tl || [];
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-secondary p-4">
       <div className="max-w-2xl mx-auto">
-        {/* HEADER (UNCHANGED AS REQUESTED) */}
+        {/* HEADER */}
         <header className="py-6 flex items-center gap-4">
           <Button variant="ghost" size="icon" onClick={() => navigate("/")}>
             <ArrowLeft className="w-6 h-6" />
           </Button>
-          <h1 className="text-2xl font-bold">Your Recommendation</h1>
+
+          <h1 className="text-2xl font-bold">
+            {language === "en" ? "Your Recommendation" : "Iyong Rekomendasyon"}
+          </h1>
         </header>
 
         <div className="space-y-6">
-          {/* MAIN CARD (same style direction as Crops.tsx) */}
+          {/* MAIN CARD */}
           <Card className="p-8 text-center">
-            {/* ICON (KEPT) */}
+            {/* ICON */}
             <div className="flex justify-center mb-6">
               <div className="w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center overflow-hidden">
                 <img
@@ -167,7 +116,9 @@ const Result = () => {
 
             {/* TITLE */}
             <h2 className="text-3xl font-bold mb-2">
-              {recommendation.recommendation}
+              {language === "en"
+                ? crop?.title.en || recommendation.recommendation
+                : crop?.title.tl || recommendation.recommendation}
             </h2>
 
             {/* TYPE */}
@@ -181,50 +132,94 @@ const Result = () => {
             </p>
           </Card>
 
-          {/* STEP-BY-STEP (LIKE Crops.tsx) */}
+          {/* STEP-BY-STEP */}
           {crop && (
-            <Card className="overflow-hidden p-6 space-y-4">
-              <h2 className="text-base font-semibold uppercase text-muted-foreground">
-                Step-by-step Guide
-              </h2>
+            <Card className="overflow-hidden">
+              {/* Header */}
+              <div className="px-6 py-5 border-b flex items-center justify-between gap-4">
+                <div>
+                  <h2 className="text-base font-semibold text-muted-foreground uppercase tracking-wide">
+                    {language === "en"
+                      ? "Step-by-step Guide"
+                      : "Hakbang-hakbang na Gabay"}
+                  </h2>
 
-              {crop.steps.map((step, index) => (
-                <div key={index} className="flex gap-4">
-                  <div className="w-7 h-7 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-semibold">
-                    {index + 1}
-                  </div>
-                  <p className="text-sm text-foreground/80">{step}</p>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    {currentSteps.length}{" "}
+                    {language === "en" ? "steps included" : "na hakbang"}
+                  </p>
                 </div>
-              ))}
+
+                {/* 🌐 LANGUAGE BUTTON */}
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="flex items-center justify-center"
+                  onClick={() => setLanguage(language === "en" ? "tl" : "en")}
+                >
+                  {language === "en" ? "Tagalog" : "English"}
+                </Button>
+              </div>
+
+              {/* Steps */}
+              <div className="px-6 py-5 space-y-3">
+                {currentSteps.map((step: string, index: number) => (
+                  <div key={index} className="flex gap-4 group">
+                    <div className="flex flex-col items-center flex-shrink-0">
+                      {/* Number */}
+                      <div className="w-7 h-7 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-semibold ring-1 ring-primary/20">
+                        {index + 1}
+                      </div>
+
+                      {/* Line */}
+                      {index < currentSteps.length - 1 && (
+                        <div className="w-px flex-1 bg-border mt-1 min-h-[16px]" />
+                      )}
+                    </div>
+
+                    {/* Step Text */}
+                    <p className="text-sm leading-relaxed pb-3 pt-1 text-foreground/80 group-last:pb-0">
+                      {step}
+                    </p>
+                  </div>
+                ))}
+              </div>
             </Card>
           )}
 
-          {/* ACTION BUTTONS */}
-          <Card className="p-6 space-y-4">
-            <Button
-              className="w-full"
-              size="lg"
-              style={{ backgroundColor: "#479941", color: "white" }}
-              onClick={() => navigate(`/video/${id}`)}
-            >
-              <Play className="w-5 h-5 mr-2" />
-              Watch Video Tutorial
-            </Button>
+          {/* ACTION BUTTONS (STICKY) */}
+          <div className="sticky bottom-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-md border-t">
+            <div className="max-w-2xl mx-auto p-4">
+              <Card className="p-4 space-y-3">
+                <Button
+                  className="w-full"
+                  size="lg"
+                  style={{ backgroundColor: "#479941", color: "white" }}
+                  onClick={() => navigate(`/video/${id}`)}
+                >
+                  <Play className="w-5 h-5 mr-2" />
 
-            <Button
-              className="w-full"
-              size="lg"
-              style={{ backgroundColor: "#52b14b", color: "white" }}
-              onClick={() => {
-                const pdfUrl = `${BASE_URL}/pdfs/${id}.pdf`;
+                  {language === "en"
+                    ? "Watch Video Tutorial"
+                    : "Panoorin ang Video Tutorial"}
+                </Button>
 
-                // 🚀 direct open (instant, no loading page)
-                window.location.href = pdfUrl;
-              }}
-            >
-              View PDF Guide
-            </Button>
-          </Card>
+                <Button
+                  className="w-full"
+                  size="lg"
+                  style={{ backgroundColor: "#6aa357", color: "white" }}
+                  onClick={() => {
+                    const pdfUrl = `${BASE_URL}/pdfs/${id}.pdf`;
+                    window.location.href = pdfUrl;
+                  }}
+                >
+                  {language === "en"
+                    ? "View PDF Guide"
+                    : "Tingnan ang PDF Guide"}
+                </Button>
+              </Card>
+            </div>
+          </div>
         </div>
       </div>
     </div>

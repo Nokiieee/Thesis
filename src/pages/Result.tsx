@@ -136,12 +136,12 @@ const Result = () => {
           {crop && (
             <Card className="overflow-hidden">
               {/* Header */}
-              <div className="px-6 py-5 border-b flex items-center justify-between gap-4">
+              <div className="px-6 py-5 border-b flex items-start justify-between gap-4">
                 <div>
                   <h2 className="text-base font-semibold text-muted-foreground uppercase tracking-wide">
                     {language === "en"
                       ? "Step-by-step Guide"
-                      : "Hakbang-hakbang na Gabay"}
+                      : "Sunod-sunod na Gabay"}
                   </h2>
 
                   <p className="text-sm text-muted-foreground mt-1">

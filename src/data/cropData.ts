@@ -40,7 +40,7 @@ export const cropData: Record<string, CropItem> = {
       ],
 
       tl: [
-        "Ang talong (Solanum melongena esculentum) ay mayaman sa potasa, bakal, protina, at mga bitamina A at B. Ang balat nito ay naglalaman ng nasunin, isang antioxidant na tumutulong protektahan ang mga selula.",
+        "Ang talong (Solanum melongena esculentum) ay mayaman sa potassium, iron, protein, at mga vitamins A at B. Ang balat nito ay naglalaman ng nasunin, isang antioxidant na tumutulong protektahan ang mga cells.",
         "Mas mainam itong tumubo sa mabuhanging loam o clay loam na lupa sa temperaturang 21 hanggang 30°C.",
         "Araruhin at suyurin ang bukid nang 2 hanggang 3 beses, at hukayin nang 15 hanggang 20 cm ang lalim upang magkaroon ng maayos na pag-unlad ang mga ugat.",
         "Humigit-kumulang 100 gramo ng binhi ang kailangan bawat ektarya. Simulan ang pagpapatubo ng binhi sa punlaan o seedling trays.",
@@ -136,7 +136,7 @@ export const cropData: Record<string, CropItem> = {
         "Magtanim ng 2 hanggang 3 binhi bawat butas na may pagitan na 30 cm. Magtanim muli sa mga nawawalang halaman pagkalipas ng 3 araw kung kinakailangan.",
         "Diligan bawat 7 hanggang 14 araw. Kapag 15 araw na ang mga punla, alisin ang mahihinang punla at iwan lamang ang dalawang pinakamalalakas sa bawat tundos.",
         "Sa ika-15 araw, gawin ang off-barring sa pamamagitan ng marahang pagbungkal ng lupa palayo sa halaman. Pagkaraan ng isang buwan, gawin ang hilling up sa pamamagitan ng pagtatambak muli ng lupa sa paligid ng puno upang masuportahan ang ugat.",
-        "Manwal na alisin ang mga damo upang maiwasan ang kompetisyon sa sustansya at tubig.",
+        "Alisin ang mga damo upang maiwasan ang kompetisyon sa sustansya at tubig.",
         "Bantayan ang mga peste tulad ng stink bugs at mga sakit ng halaman. Alisin at ibaon ang mga nahawaang halaman at panatilihing malinis ang bukid.",
         "Nagsisimulang mamulaklak ang okra pagkalipas ng 40 hanggang 75 araw. Handa nang anihin ang bunga 4 hanggang 6 na araw matapos mamulaklak.",
         "Mag-ani sa umaga o huling bahagi ng hapon kapag ang mga bunga ay may habang 3 hanggang 4 pulgada.",
@@ -292,7 +292,7 @@ export const cropData: Record<string, CropItem> = {
       ],
 
       tl: [
-        "Ang upo (bottle gourd) ay isang maraming gamit na halaman. Ang bunga, usbong, at mga buto nito ay maaaring kainin, at ang tuyong balat nito ay maaaring gamitin sa paggawa ng mga kasangkapan at handicrafts.",
+        "Ang upo (bottle gourd) ay isang halaman na maraming gamit. Ang bunga, usbong, at mga buto nito ay maaaring kainin, at ang tuyong balat nito ay maaaring gamitin sa paggawa ng mga kasangkapan at handicrafts.",
         "Araruhin at suyurin ang lupa nang 2 hanggang 3 beses hanggang ito ay maging malambot at may maayos na pagpasok ng hangin.",
         "Ibabad ang mga binhi sa tubig sa loob ng 24 oras, pagkatapos ay balutin sa mamasa-masang tela hanggang sa ito ay sumibol.",
         "Itanim nang direkta sa lupa ang mga binhi na may humigit-kumulang 1 metrong pagitan. Sa panahon ng tag-ulan, magtanim sa nakaangat na tudling.",
@@ -375,7 +375,7 @@ export const cropData: Record<string, CropItem> = {
       ],
 
       tl: [
-        "Ang siling labuyo (Capsicum annuum L.) ay isang masustansyang pananim na mayaman sa Bitamina C, provitamin A, at bakal. Ang mga dahon nito ay may calcium, at ang mga bunga ay may katangiang medikal na maaaring makatulong sa pagpapagaan ng pananakit dulot ng arthritis at pagbawas ng panganib ng diabetes.",
+        "Ang siling labuyo (Capsicum annuum L.) ay isang masustansyang pananim na mayaman sa Bitamina C, provitamin A, at iron. Ang mga dahon nito ay may calcium, at ang mga bunga ay may katangiang medikal na maaaring makatulong sa pagpapagaan ng pananakit dulot ng arthritis at pagbawas ng panganib ng diabetes.",
         "Mas mainam itong tumubo sa maaraw na kapaligiran. Magtanim mula Mayo hanggang Setyembre (tag-ulan) o Oktubre hanggang Pebrero (tag-init). Mas gusto nito ang mabuhanging loam o clay loam na lupa.",
         "Araruhin at suyurin ang bukid nang 2 hanggang 3 beses hanggang maging pino at maluwag ang lupa. Gumawa ng mga tudling na may pagitan na 80 cm, o gumamit ng double-row system upang maprotektahan ang mga bunga laban sa sun scalding.",
         "Humigit-kumulang 100 gramo ng binhi ang kailangan bawat ektarya. Magpunla sa seedbed sa pamamagitan ng pagsusunog ng dayami upang ma-sterilize ang lupa, o gumamit ng seedling trays.",

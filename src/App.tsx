@@ -10,9 +10,7 @@ import {
   useLocation,
 } from "react-router-dom";
 import { useEffect, useRef } from "react";
-
 import { App as CapacitorApp } from "@capacitor/app";
-
 import Home from "./pages/Home";
 import Questionnaire from "./pages/Questionnaire";
 import QuestionnaireOutdoor from "@/pages/QuestionnaireOutdoor";
@@ -27,9 +25,6 @@ import Crops from "./pages/Crops";
 
 const queryClient = new QueryClient();
 
-/* =========================
-   BACK BUTTON HANDLER (FIXED)
-========================= */
 const BackHandler = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -40,13 +35,11 @@ const BackHandler = () => {
 
     const setupListener = async () => {
       backHandler = await CapacitorApp.addListener("backButton", () => {
-        // ✅ If NOT on Home → go back
         if (location.pathname !== "/") {
           navigate(-1);
           return;
         }
 
-        // ✅ If on Home → double press to exit
         const now = Date.now();
 
         if (now - lastBackPress.current < 2000) {
@@ -68,9 +61,6 @@ const BackHandler = () => {
   return null;
 };
 
-/* =========================
-   MAIN APP
-========================= */
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
@@ -78,13 +68,11 @@ const App = () => (
       <Sonner />
 
       <BrowserRouter>
-        {/* ✅ BACK BUTTON FIX */}
         <BackHandler />
 
         <Routes>
           <Route path="/" element={<Home />} />
 
-          {/* Questionnaire */}
           <Route path="/questionnaire-type" element={<QuestionnaireType />} />
           <Route
             path="/questionnaire"
@@ -95,19 +83,15 @@ const App = () => (
             element={<QuestionnaireOutdoor />}
           />
 
-          {/* Results and Guides */}
           <Route path="/result" element={<Result />} />
           <Route path="/result-outdoor" element={<ResultOutdoor />} />
           <Route path="/tutorials" element={<Tutorials />} />
           <Route path="/video/:videoId" element={<VideoPlayer />} />
 
-          {/* Crops */}
           <Route path="/crop/:id" element={<Crops />} />
 
-          {/* PDFs */}
           <Route path="/pdfs" element={<PdfPage />} />
 
-          {/* Fallback */}
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

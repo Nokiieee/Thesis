@@ -1,5 +1,3 @@
-// src/data/indoorData.ts
-
 export type IndoorItem = {
   title: {
     en: string;

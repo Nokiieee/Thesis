@@ -16,16 +16,13 @@ const VideoPlayer = () => {
 
   const videoRef = useRef<HTMLVideoElement>(null);
 
-  // 🌐 Language state
   const [language, setLanguage] = useState<"en" | "tl">("en");
 
-  // Combine outdoor + indoor guides
   const allGuides = {
     ...cropData,
     ...indoorData,
   };
 
-  // All available videos
   const videoData: Record<
     string,
     {
@@ -116,7 +113,6 @@ const VideoPlayer = () => {
     );
   }
 
-  // Lock landscape on fullscreen
   useEffect(() => {
     const handleFullScreenChange = () => {
       const orientation = screen.orientation as any;
@@ -140,7 +136,6 @@ const VideoPlayer = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-secondary">
       <div className="max-w-4xl mx-auto">
-        {/* HEADER */}
         <header className="p-4 flex items-center gap-4">
           <Button variant="ghost" size="icon" onClick={() => navigate(-1)}>
             <ArrowLeft className="w-6 h-6" />
@@ -150,7 +145,6 @@ const VideoPlayer = () => {
         </header>
 
         <div className="px-4 pb-4 space-y-4">
-          {/* VIDEO PLAYER */}
           <div className="aspect-video w-full max-h-[80vh] bg-black rounded-lg overflow-hidden">
             <video
               ref={videoRef}
@@ -161,10 +155,8 @@ const VideoPlayer = () => {
             />
           </div>
 
-          {/* STEP-BY-STEP GUIDE */}
           {currentGuide && (
             <Card className="overflow-hidden">
-              {/* Header */}
               <div className="px-6 py-5 border-b flex items-start justify-between gap-4">
                 <div>
                   <h2 className="text-2xl font-bold">
@@ -179,7 +171,6 @@ const VideoPlayer = () => {
                   </p>
                 </div>
 
-                {/* 🌐 LANGUAGE TOGGLE BUTTON */}
                 <Button
                   variant="outline"
                   size="sm"
@@ -190,12 +181,10 @@ const VideoPlayer = () => {
                 </Button>
               </div>
 
-              {/* Steps */}
               <div className="px-6 py-5 space-y-3">
                 {currentGuide.steps[language].map(
                   (step: string, index: number) => (
                     <div key={index} className="flex gap-4 group">
-                      {/* Number + Line */}
                       <div className="flex flex-col items-center flex-shrink-0">
                         <div className="w-7 h-7 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-semibold ring-1 ring-primary/20">
                           {index + 1}
@@ -206,7 +195,6 @@ const VideoPlayer = () => {
                         )}
                       </div>
 
-                      {/* Text */}
                       <p className="text-sm leading-relaxed pb-3 pt-1 text-foreground/80 group-last:pb-0">
                         {step}
                       </p>

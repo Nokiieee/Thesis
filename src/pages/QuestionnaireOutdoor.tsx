@@ -1,4 +1,3 @@
-// QuestionnaireOutdoor.tsx
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -13,9 +12,6 @@ type Question = {
   options: string[];
 };
 
-// --------------------
-// Outdoor questions
-// --------------------
 const outdoorQuestions: Question[] = [
   {
     id: "planting_space",
@@ -154,11 +150,7 @@ const outdoorQuestions: Question[] = [
   },
 ];
 
-// --------------------
-// Mapping options → numbers
-// --------------------
 const optionToNumber = (id: string, value: string) => {
-  // Extract label before colon
   const label = value.split(":")[0].trim();
 
   const map: Record<string, Record<string, number>> = {
@@ -212,9 +204,6 @@ const optionToNumber = (id: string, value: string) => {
   return map[id][label];
 };
 
-// --------------------
-// Frontend → Backend key mapping
-// --------------------
 const frontendToBackendKeys: Record<string, string> = {
   planting_space: "Space_Size",
   soil_type: "Soil_Type",
@@ -230,12 +219,9 @@ const frontendToBackendKeys: Record<string, string> = {
   fertilizer_access: "Fertilizer_Access",
   wind_condition: "Wind_Exposure",
   planting_purpose: "Planting_Purpose",
-  farming_experience: "Farming_Experience", // ✅ NEW
+  farming_experience: "Farming_Experience",
 };
 
-// --------------------
-// Component
-// --------------------
 const QuestionnaireOutdoor = () => {
   const navigate = useNavigate();
   const questions = outdoorQuestions;
@@ -262,9 +248,6 @@ const QuestionnaireOutdoor = () => {
     }
 
     if (step + 1 === questions.length) {
-      // --------------------
-      // Convert frontend answers → backend keys & numeric values
-      // --------------------
       const payload: Record<string, number> = {};
 
       for (const frontendKey in frontendToBackendKeys) {
@@ -276,7 +259,6 @@ const QuestionnaireOutdoor = () => {
 
       console.log("Payload sent to backend:", payload);
 
-      // Debug: check payload before sending
       console.log("Payload sent to backend:", payload);
 
       navigate("/result-outdoor", { state: payload });

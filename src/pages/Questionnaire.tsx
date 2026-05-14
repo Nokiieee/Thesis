@@ -12,7 +12,6 @@ type Question = {
   options: string[];
 };
 
-// Indoor questions
 const indoorQuestions: Question[] = [
   {
     id: "available_space",
@@ -150,9 +149,6 @@ const indoorQuestions: Question[] = [
   },
 ];
 
-// --------------------
-// Mapping strings → numbers
-// --------------------
 const frontendToDatasetKey: Record<string, string> = {
   available_space: "Space_Size",
   power_availability: "Power_Reliability",
@@ -221,7 +217,7 @@ const optionToNumber = (questionId: string, value: string) => {
 
     interest_in_fish: {
       No: 0,
-      Yes: 2, // intentional weighting
+      Yes: 2,
     },
 
     goal_type: {
@@ -240,9 +236,6 @@ const optionToNumber = (questionId: string, value: string) => {
   return map[questionId]?.[label] ?? 0;
 };
 
-// --------------------
-// COMPONENT
-// --------------------
 type Props = { farmingType: "Indoor" | "Outdoor" };
 
 const Questionnaire = ({ farmingType }: Props) => {

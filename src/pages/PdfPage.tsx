@@ -1,4 +1,3 @@
-// src/pages/PdfPage.tsx
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
@@ -118,15 +117,13 @@ const PdfPage = () => {
     document.body.removeChild(link);
   };
 
-  // ✅ FINAL FIX: direct open Render PDF
   const handleView = (fileUrl: string) => {
-    window.location.href = fileUrl; // or window.open(fileUrl, "_blank");
+    window.location.href = fileUrl;
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-secondary p-4">
       <div className="max-w-2xl mx-auto">
-        {/* Header */}
         <header className="py-6 flex items-center gap-4">
           <Button variant="ghost" size="icon" onClick={() => navigate("/")}>
             <ArrowLeft className="w-6 h-6" />
@@ -141,7 +138,6 @@ const PdfPage = () => {
           className="flex flex-col gap-8 overflow-y-auto"
           style={{ height: "calc(100vh - 6rem)" }}
         >
-          {/* Indoor */}
           <section>
             <h2 className="text-xl font-semibold mb-4">
               Indoor Farming Methods
@@ -159,7 +155,6 @@ const PdfPage = () => {
             </div>
           </section>
 
-          {/* Outdoor */}
           <section>
             <h2 className="text-xl font-semibold mb-4">Lowland Crops</h2>
 
@@ -200,7 +195,6 @@ const ZoomCard = ({ pdf, onDownload, onView }: ZoomCardProps) => {
       transition={{ type: "spring", stiffness: 150, damping: 25 }}
     >
       <Card className="p-4 flex items-center gap-4 shadow-lg bg-white transition-all duration-300 hover:-translate-y-2 hover:shadow-xl">
-        {/* Logo */}
         <div className="w-24 h-24 flex items-center justify-center flex-shrink-0">
           <img
             src={pdf.logo}
@@ -209,12 +203,10 @@ const ZoomCard = ({ pdf, onDownload, onView }: ZoomCardProps) => {
           />
         </div>
 
-        {/* Title */}
         <div className="flex-1">
           <h3 className="font-semibold">{pdf.title}</h3>
         </div>
 
-        {/* Buttons */}
         <div className="flex flex-col gap-2">
           <Button
             style={{ backgroundColor: "#73AF6F", color: "white" }}

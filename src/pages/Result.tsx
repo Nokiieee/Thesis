@@ -23,7 +23,6 @@ const Result = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // 🌐 Language state
   const [language, setLanguage] = useState<"en" | "tl">("en");
 
   const [recommendation, setRecommendation] = useState<BackendResponse | null>(
@@ -82,14 +81,12 @@ const Result = () => {
 
   const crop = indoorData[id];
 
-  // ✅ Get translated steps
   const currentSteps =
     language === "en" ? crop?.steps.en || [] : crop?.steps.tl || [];
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-secondary p-4">
       <div className="max-w-2xl mx-auto">
-        {/* HEADER */}
         <header className="py-6 flex items-center gap-4">
           <Button variant="ghost" size="icon" onClick={() => navigate("/")}>
             <ArrowLeft className="w-6 h-6" />
@@ -101,9 +98,7 @@ const Result = () => {
         </header>
 
         <div className="space-y-6">
-          {/* MAIN CARD */}
           <Card className="p-8 text-center">
-            {/* ICON */}
             <div className="flex justify-center mb-6">
               <div className="w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center overflow-hidden">
                 <img
@@ -114,28 +109,23 @@ const Result = () => {
               </div>
             </div>
 
-            {/* TITLE */}
             <h2 className="text-3xl font-bold mb-2">
               {language === "en"
                 ? crop?.title.en || recommendation.recommendation
                 : crop?.title.tl || recommendation.recommendation}
             </h2>
 
-            {/* TYPE */}
             <div className="inline-block px-4 py-1 bg-primary/10 text-primary rounded-full text-sm font-medium mb-4">
               Indoor Farming
             </div>
 
-            {/* DESCRIPTION */}
             <p className="text-muted-foreground text-lg">
               {recommendation.description}
             </p>
           </Card>
 
-          {/* STEP-BY-STEP */}
           {crop && (
             <Card className="overflow-hidden">
-              {/* Header */}
               <div className="px-6 py-5 border-b flex items-start justify-between gap-4">
                 <div>
                   <h2 className="text-base font-semibold text-muted-foreground uppercase tracking-wide">
@@ -150,7 +140,6 @@ const Result = () => {
                   </p>
                 </div>
 
-                {/* 🌐 LANGUAGE BUTTON */}
                 <Button
                   variant="outline"
                   size="sm"
@@ -161,23 +150,19 @@ const Result = () => {
                 </Button>
               </div>
 
-              {/* Steps */}
               <div className="px-6 py-5 space-y-3">
                 {currentSteps.map((step: string, index: number) => (
                   <div key={index} className="flex gap-4 group">
                     <div className="flex flex-col items-center flex-shrink-0">
-                      {/* Number */}
                       <div className="w-7 h-7 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-semibold ring-1 ring-primary/20">
                         {index + 1}
                       </div>
 
-                      {/* Line */}
                       {index < currentSteps.length - 1 && (
                         <div className="w-px flex-1 bg-border mt-1 min-h-[16px]" />
                       )}
                     </div>
 
-                    {/* Step Text */}
                     <p className="text-sm leading-relaxed pb-3 pt-1 text-foreground/80 group-last:pb-0">
                       {step}
                     </p>
@@ -187,7 +172,6 @@ const Result = () => {
             </Card>
           )}
 
-          {/* ACTION BUTTONS (STICKY) */}
           <div className="sticky bottom-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-md border-t">
             <div className="max-w-2xl mx-auto p-4">
               <Card className="p-4 space-y-3">

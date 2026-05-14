@@ -1,5 +1,3 @@
-// src/pages/Crops.tsx
-
 import { useParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -11,11 +9,7 @@ import { cropData } from "@/data/cropData";
 const Crops = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-
-  // 🌐 Language state
   const [language, setLanguage] = useState<"en" | "tl">("en");
-
-  // ✅ Get crop from external file
   const crop = cropData[id ?? ""];
 
   if (!crop) {
@@ -31,12 +25,9 @@ const Crops = () => {
   return (
     <div className="min-h-screen p-6 bg-gradient-to-b from-background to-secondary">
       <div className="max-w-2xl mx-auto space-y-6">
-        {/* BACK BUTTON */}
         <Button onClick={() => navigate(-1)}>← Back</Button>
 
-        {/* MAIN CARD */}
         <Card className="overflow-hidden">
-          {/* HEADER */}
           <div className="px-6 py-5 border-b flex items-start justify-between gap-4">
             <div>
               <h1 className="text-3xl font-bold">
@@ -51,7 +42,6 @@ const Crops = () => {
               </p>
             </div>
 
-            {/* 🌐 LANGUAGE TOGGLE BUTTON */}
             <Button
               variant="outline"
               size="sm"
@@ -61,7 +51,6 @@ const Crops = () => {
             </Button>
           </div>
 
-          {/* STEPS */}
           <div className="px-6 py-5 space-y-3">
             <h2 className="text-base font-semibold text-muted-foreground uppercase tracking-wide mb-4">
               {language === "en"
@@ -71,19 +60,16 @@ const Crops = () => {
 
             {crop.steps[language].map((step: string, index: number) => (
               <div key={index} className="flex gap-4 group">
-                {/* NUMBER + LINE */}
                 <div className="flex flex-col items-center flex-shrink-0">
                   <div className="w-7 h-7 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-semibold ring-1 ring-primary/20">
                     {index + 1}
                   </div>
 
-                  {/* LINE */}
                   {index < crop.steps[language].length - 1 && (
                     <div className="w-px flex-1 bg-border mt-1 min-h-[16px]" />
                   )}
                 </div>
 
-                {/* STEP TEXT */}
                 <p className="text-sm leading-relaxed pb-3 pt-1 text-foreground/80 group-last:pb-0">
                   {step}
                 </p>
@@ -92,9 +78,7 @@ const Crops = () => {
           </div>
         </Card>
 
-        {/* BUTTONS */}
         <Card className="p-6 space-y-4">
-          {/* VIDEO BUTTON */}
           <Button
             className="w-full"
             style={{
@@ -110,7 +94,6 @@ const Crops = () => {
               : "Panoorin ang Video Tutorial"}
           </Button>
 
-          {/* PDF BUTTON */}
           <Button
             className="w-full"
             style={{

@@ -6,7 +6,6 @@ import { useEffect, useState } from "react";
 
 import Spinner from "./Spinner";
 
-// ✅ NEW STATIC CATEGORY IMAGES
 import UprightPNG from "@/assets/logos/upright.png";
 import HardyPNG from "@/assets/logos/hardy.png";
 import ViningPNG from "@/assets/logos/vining.png";
@@ -18,7 +17,6 @@ type BackendResponse = {
   video_id: string;
 };
 
-// ✅ CATEGORY → IMAGE MAP
 const categoryImages: Record<string, string> = {
   "Hardy Crops": HardyPNG,
   "Upright Crops": UprightPNG,
@@ -37,9 +35,6 @@ const ResultOutdoor = () => {
   );
   const [loading, setLoading] = useState(true);
 
-  /* =========================
-     FETCH RECOMMENDATION
-  ========================== */
   useEffect(() => {
     const answers = location.state;
 
@@ -49,7 +44,7 @@ const ResultOutdoor = () => {
     }
 
     const fetchOutdoorPrediction = async () => {
-      setLoading(true); // ✅ force spinner immediately
+      setLoading(true);
 
       try {
         const res = await fetch(
@@ -77,9 +72,6 @@ const ResultOutdoor = () => {
     fetchOutdoorPrediction();
   }, [location.state, navigate]);
 
-  /* =========================
-     LOADING
-  ========================== */
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -95,7 +87,6 @@ const ResultOutdoor = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-secondary p-4">
       <div className="max-w-2xl mx-auto">
-        {/* HEADER */}
         <header className="py-6 flex items-center gap-4">
           <Button variant="ghost" size="icon" onClick={() => navigate("/")}>
             <ArrowLeft className="w-6 h-6" />
@@ -104,9 +95,7 @@ const ResultOutdoor = () => {
         </header>
 
         <div className="space-y-6">
-          {/* MAIN CARD */}
           <Card className="p-8 text-center bg-white">
-            {/* STATIC IMAGE */}
             <div className="flex justify-center mb-6">
               <div className="w-24 h-24 rounded-full bg-white flex items-center justify-center">
                 <img
@@ -117,23 +106,19 @@ const ResultOutdoor = () => {
               </div>
             </div>
 
-            {/* TITLE */}
             <h2 className="text-3xl font-bold mb-2">
               {recommendation.recommendation}
             </h2>
 
-            {/* BADGE */}
             <div className="inline-block px-4 py-1 bg-primary/10 text-primary rounded-full text-sm font-medium mb-4">
               Outdoor Farming
             </div>
 
-            {/* DESCRIPTION */}
             <p className="text-muted-foreground text-lg">
               {recommendation.description}
             </p>
           </Card>
 
-          {/* CROPS GRID */}
           <Card className="p-6 space-y-4 text-center">
             <h3 className="text-xl font-semibold mb-2">Recommended Crops</h3>
 

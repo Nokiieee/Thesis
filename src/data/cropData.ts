@@ -1,5 +1,3 @@
-// src/data/cropData.ts
-
 export type CropItem = {
   title: {
     en: string;

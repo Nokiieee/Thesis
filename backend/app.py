@@ -7,15 +7,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 
-# --------------------
-# Load models & assets
-# --------------------
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-# Indoor model
 indoor_model = joblib.load(os.path.join(BASE_DIR, "model.pkl"))
 
-# Outdoor model
 try:
     outdoor_model = joblib.load(os.path.join(BASE_DIR, "model_outdoor.pkl"))
     scaler_outdoor = joblib.load(os.path.join(BASE_DIR, "scaler_outdoor.pkl"))
@@ -28,18 +23,12 @@ except Exception as e:
     scaler_outdoor = None
     label_mapping_outdoor = None
 
-# --------------------
-# Indoor labels (unchanged)
-# --------------------
 indoor_labels = {
     0: "aeroponics",
     1: "aquaponics",
     2: "hydroponics"
 }
 
-# --------------------
-# Schemas
-# --------------------
 class IndoorData(BaseModel):
     Space_Size: int
     Power_Reliability: int
@@ -75,10 +64,6 @@ class OutdoorData(BaseModel):
     Planting_Purpose: int
     Farming_Experience: int
 
-
-# --------------------
-# App & CORS
-# --------------------
 app = FastAPI()
 
 # Serve PDFs
@@ -92,9 +77,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# --------------------
-# Indoor prediction
-# --------------------
 @app.post("/predict-indoor")
 def predict_indoor(data: IndoorData):
     values = np.array([[ 
@@ -125,10 +107,6 @@ def predict_indoor(data: IndoorData):
         "video_id": method
     }
 
-
-# --------------------
-# Outdoor prediction (FIXED)
-# --------------------
 @app.post("/predict-outdoor")
 def predict_outdoor(data: OutdoorData):
     if outdoor_model is None or scaler_outdoor is None or label_mapping_outdoor is None:
@@ -138,7 +116,6 @@ def predict_outdoor(data: OutdoorData):
         )
     
     try:
-        # Build feature array
         values = np.array([[ 
             data.Space_Size,
             data.Soil_Type,
@@ -157,13 +134,10 @@ def predict_outdoor(data: OutdoorData):
             data.Farming_Experience
         ]])
 
-        # ✅ Apply scaler (VERY IMPORTANT)
         values = scaler_outdoor.transform(values)
 
-        # Predict
         pred = outdoor_model.predict(values)[0]
 
-        # ✅ Decode using saved mapping
         label = label_mapping_outdoor.get(pred, str(pred))
 
         return {

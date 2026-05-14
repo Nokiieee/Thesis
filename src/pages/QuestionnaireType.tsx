@@ -4,8 +4,6 @@ import { ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-
-// Correct logo imports
 import HydroponicsLogo from "@/assets/logos/hydroponics.png";
 import AquaponicsLogo from "@/assets/logos/aquaponics.png";
 import AeroponicsLogo from "@/assets/logos/aeroponics.png";
@@ -19,7 +17,6 @@ import SquashLogo from "@/assets/logos/squash.png";
 import HotPepperLogo from "@/assets/logos/hot-pepper.png";
 import OkraLogo from "@/assets/logos/okra.png";
 
-// Logo arrays
 const indoorLogos = [HydroponicsLogo, AquaponicsLogo, AeroponicsLogo];
 const outdoorLogos = [
   UpoLogo,
@@ -33,7 +30,6 @@ const outdoorLogos = [
   OkraLogo,
 ];
 
-// Framer Motion variants for fade effect
 const fadeVariants = {
   initial: { opacity: 0 },
   animate: { opacity: 1 },
@@ -46,7 +42,6 @@ const QuestionnaireType = () => {
   const [indoorIndex, setIndoorIndex] = useState(0);
   const [outdoorIndex, setOutdoorIndex] = useState(0);
 
-  // Rotate indoor logo every 3 seconds
   useEffect(() => {
     const indoorTimer = setInterval(() => {
       setIndoorIndex((prev) => (prev + 1) % indoorLogos.length);
@@ -54,7 +49,6 @@ const QuestionnaireType = () => {
     return () => clearInterval(indoorTimer);
   }, []);
 
-  // Rotate outdoor logo every 3 seconds
   useEffect(() => {
     const outdoorTimer = setInterval(() => {
       setOutdoorIndex((prev) => (prev + 1) % outdoorLogos.length);
@@ -72,62 +66,61 @@ const QuestionnaireType = () => {
       </header>
 
       <div className="max-w-md mx-auto space-y-6 mt-8">
-       {/* Indoor Farming */}
-<Card
-  className="p-6 hover:bg-muted transition cursor-pointer flex items-center gap-4 h-32"
-  onClick={() => navigate("/questionnaire")}
->
-  <div className="w-20 h-20 flex items-center justify-center flex-shrink-0">
-    <AnimatePresence mode="wait">
-      <motion.img
-        key={indoorIndex}
-        src={indoorLogos[indoorIndex]}
-        alt="Indoor Farming"
-        className="max-w-full max-h-full object-contain"
-        variants={fadeVariants}
-        initial="initial"
-        animate="animate"
-        exit="exit"
-        transition={{ duration: 0.5 }}
-      />
-    </AnimatePresence>
-  </div>
-  <div className="flex-1">
-    <h2 className="text-xl font-semibold">Indoor Farming</h2>
-    <p className="text-muted-foreground">
-      Answer questions about your indoor farming environment.
-    </p>
-  </div>
-</Card>
+        <Card
+          className="p-6 hover:bg-muted transition cursor-pointer flex items-center gap-4"
+          onClick={() => navigate("/questionnaire")}
+        >
+          <div className="w-20 h-20 flex items-center justify-center flex-shrink-0">
+            <AnimatePresence mode="wait">
+              <motion.img
+                key={indoorIndex}
+                src={indoorLogos[indoorIndex]}
+                alt="Indoor Farming"
+                className="max-w-full max-h-full object-contain"
+                variants={fadeVariants}
+                initial="initial"
+                animate="animate"
+                exit="exit"
+                transition={{ duration: 0.5 }}
+              />
+            </AnimatePresence>
+          </div>
+          <div className="flex-1">
+            <h2 className="text-xl font-semibold">Indoor Farming</h2>
+            <p className="text-muted-foreground">
+              Answer questions about your indoor farming environment.
+            </p>
+          </div>
+        </Card>
 
-{/* Outdoor Farming */}
-<Card
-  className="p-6 hover:bg-muted transition cursor-pointer flex items-center gap-4 h-32"
-  onClick={() => navigate("/questionnaire-outdoor")}
->
-  <div className="w-20 h-20 flex items-center justify-center flex-shrink-0">
-    <AnimatePresence mode="wait">
-      <motion.img
-        key={outdoorIndex}
-        src={outdoorLogos[outdoorIndex]}
-        alt="Outdoor Farming"
-        className="max-w-full max-h-full object-contain"
-        variants={fadeVariants}
-        initial="initial"
-        animate="animate"
-        exit="exit"
-        transition={{ duration: 0.5 }}
-      />
-    </AnimatePresence>
-  </div>
-  <div className="flex-1">
-    <h2 className="text-xl font-semibold">Outdoor Farming (Lowland Crops)</h2>
-    <p className="text-muted-foreground">
-      Evaluate your outdoor environment for lowland crop planting.
-    </p>
-  </div>
-</Card>
-
+        <Card
+          className="p-6 hover:bg-muted transition cursor-pointer flex items-center gap-4"
+          onClick={() => navigate("/questionnaire-outdoor")}
+        >
+          <div className="w-20 h-20 flex items-center justify-center flex-shrink-0">
+            <AnimatePresence mode="wait">
+              <motion.img
+                key={outdoorIndex}
+                src={outdoorLogos[outdoorIndex]}
+                alt="Outdoor Farming"
+                className="max-w-full max-h-full object-contain"
+                variants={fadeVariants}
+                initial="initial"
+                animate="animate"
+                exit="exit"
+                transition={{ duration: 0.5 }}
+              />
+            </AnimatePresence>
+          </div>
+          <div className="flex-1">
+            <h2 className="text-xl font-semibold">
+              Outdoor Farming (Lowland Crops)
+            </h2>
+            <p className="text-muted-foreground">
+              Evaluate your outdoor environment for lowland crop planting.
+            </p>
+          </div>
+        </Card>
       </div>
     </div>
   );

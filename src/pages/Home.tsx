@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
 import { Menu, X } from "lucide-react";
-
 import AgriLogo from "@/assets/logos/agri_logo.png";
 import MethodLogo from "@/assets/logos/farming_method.png";
 import TutorialsLogo from "@/assets/logos/tutorials_logo.png";
@@ -49,9 +48,6 @@ const Home = () => {
     return sessionStorage.getItem("hasLoaded") ? false : true;
   });
 
-  /* =========================
-     LOADING SCREEN
-  ========================== */
   useEffect(() => {
     if (!loading) return;
 
@@ -63,29 +59,15 @@ const Home = () => {
     return () => clearTimeout(timer);
   }, [loading]);
 
-  /* =========================
-     GLOBAL 1-MINUTE INTERVAL
-  ========================== */
   useEffect(() => {
     const interval = setInterval(() => {
       console.log("🔄 Global 1-minute background task running");
-
-      // Example 1: warm backend (avoid cold start)
       fetch("https://thesis-ljvg.onrender.com/ping").catch(() => {});
-
-      // Example 2: preload or refresh cached data
-      // localStorage.setItem("lastSync", Date.now().toString());
-
-      // Example 3: prefetch recommendation if needed
-      // fetch("https://thesis-ljvg.onrender.com/predict-indoor")
     }, 60000);
 
     return () => clearInterval(interval);
   }, []);
 
-  /* =========================
-     ACTIVE SLIDE DETECTION
-  ========================== */
   useEffect(() => {
     const handleScroll = () => {
       if (!containerRef.current) return;
@@ -167,7 +149,6 @@ const Home = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-secondary flex flex-col items-center relative">
-      {/* Header */}
       <div
         className="fixed top-0 left-0 w-full bg-gradient-to-b from-background to-secondary z-20 flex flex-col items-center py-6 shadow-md"
         style={{ height: HEADER_HEIGHT }}
@@ -179,7 +160,6 @@ const Home = () => {
         </p>
       </div>
 
-      {/* Sidebar */}
       <motion.aside
         initial={{ x: -220 }}
         transition={{ type: "spring", stiffness: 300, damping: 30 }}
@@ -194,7 +174,6 @@ const Home = () => {
         </div>
       </motion.aside>
 
-      {/* Slides */}
       <div
         ref={containerRef}
         className="flex flex-col gap-16 w-full max-w-3xl mt-[180px] px-4 pb-16 overflow-y-auto snap-y snap-mandatory"

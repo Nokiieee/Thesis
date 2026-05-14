@@ -5,7 +5,6 @@ import { ArrowLeft } from "lucide-react";
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 
-// Import logos
 import HydroponicsLogo from "@/assets/logos/hydroponics.png";
 import AquaponicsLogo from "@/assets/logos/aquaponics.png";
 import AeroponicsLogo from "@/assets/logos/aeroponics.png";
@@ -127,7 +126,6 @@ const Tutorials = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-secondary p-4">
       <div className="max-w-2xl mx-auto">
-        {/* Header */}
         <header className="py-6 flex items-center gap-4">
           <Button variant="ghost" size="icon" onClick={() => navigate("/")}>
             <ArrowLeft className="w-6 h-6" />
@@ -142,7 +140,6 @@ const Tutorials = () => {
           className="flex flex-col gap-8 overflow-y-auto"
           style={{ height: "calc(100vh - 6rem)" }}
         >
-          {/* Indoor Farming */}
           <section>
             <h2 className="text-xl font-semibold mb-4">
               Indoor Farming Methods
@@ -162,7 +159,6 @@ const Tutorials = () => {
             </div>
           </section>
 
-          {/* Lowland Crops */}
           <section>
             <h2 className="text-xl font-semibold mb-4">Lowland Crops</h2>
             <div className="space-y-4">
@@ -181,7 +177,6 @@ const Tutorials = () => {
   );
 };
 
-// ZoomCard component with scroll zoom + blur effect
 type ZoomCardProps = {
   tutorial: Tutorial;
   onClick: () => void;
